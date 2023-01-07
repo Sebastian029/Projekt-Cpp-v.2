@@ -96,10 +96,11 @@ int Mysql_connector::login(string login, string haslo) {
         if (login == result->getString(2).c_str()) {
             if (haslo == result->getString(3).c_str()) {
                 cout << "zalogowano" << endl;
+                this->id = result->getInt(1);
                 return result->getInt(1);
             }
             cout << "Bledne haslo" << endl;
-            return -1;
+            return -2;
         }
     }
     cout << "Bledne dane" << endl;
@@ -145,7 +146,7 @@ vector <User>  Mysql_connector::lista_uzytkownikow(vector<User> users) {
     return users;
 };
 
-void Mysql_connector::create_account(string login, string password) {
+int Mysql_connector::create_account(string login, string password) {
     sql::PreparedStatement* pstmt;
     list <string> logins;
     pstmt = con->prepareStatement("SELECT login FROM Uzytkownicy;");
@@ -153,7 +154,7 @@ void Mysql_connector::create_account(string login, string password) {
     while (result->next()) {
         if (result->getString(1).c_str() == login) {
             cout << "Zajety login";
-            return;
+            return -1;
         }
     }
 
@@ -165,6 +166,7 @@ void Mysql_connector::create_account(string login, string password) {
     pstmt->execute();
 
     cout << "Dodano uzytkownika";
+    return 1;
 }
 
 

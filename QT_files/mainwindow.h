@@ -5,8 +5,7 @@
 #include <QMessageBox>
 #include <QLineEdit>
 #include <QString>
-#include "libdialog.h"
-#include "addaccount.h"
+#include "connection.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -21,15 +20,15 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
-
+    void on_pushButton_zaloguj_clicked();
+    void on_pushButton_zarejestruj_clicked();
+    void on_pushButton_zaloz_clicked();
+    void on_pushButton_wyloguj_clicked();
+    void on_pushButton_sprawdz_clicked();
+    void on_pushButton_anuluj_clicked();
 private:
     Ui::MainWindow *ui;
 
-    libDialog *LibDialog;
-    AddAccount *addaccount;
-
+  
 };
 #endif // MAINWINDOW_H

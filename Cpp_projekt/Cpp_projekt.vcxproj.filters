@@ -21,61 +21,39 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
-    <Filter Include="Header Files\Source Files">
-      <UniqueIdentifier>{6b69b43e-e370-4745-bee3-e2f80f9978f3}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="Cpp_projekt.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <QtUic Include="Cpp_projekt.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtMoc Include="Cpp_projekt.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <ClCompile Include="Cpp_projekt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\QT_files\addaccount.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\QT_files\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\QT_files\libdialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\QT_files\mainwindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\QT_files\connection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="..\QT_files\addaccount.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
     <QtUic Include="..\QT_files\mainwindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="..\QT_files\libdialog.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="..\QT_files\libdialog.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="..\QT_files\addaccount.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="..\QT_files\mainwindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\QT_files\structures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\QT_files\connection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

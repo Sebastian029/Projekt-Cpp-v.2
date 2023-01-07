@@ -58,6 +58,16 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\iwans\OneDrive\Documents\Visual Studio 2022\mysql-connector-c++-8.0.31\include\jdbc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>STATIC_CONCPP;$(Qt_DEFINES_);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Users\iwans\OneDrive\Documents\Visual Studio 2022\mysql-connector-c++-8.0.31\lib64\vs14;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>mysqlcppconn-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
@@ -86,26 +96,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <QtRcc Include="Cpp_projekt.qrc" />
-    <QtUic Include="..\QT_files\addaccount.ui" />
-    <QtUic Include="..\QT_files\libdialog.ui" />
     <QtUic Include="..\QT_files\mainwindow.ui" />
-    <QtUic Include="Cpp_projekt.ui" />
-    <QtMoc Include="Cpp_projekt.h" />
-    <ClCompile Include="..\QT_files\addaccount.cpp" />
-    <ClCompile Include="..\QT_files\libdialog.cpp" />
+    <ClCompile Include="..\QT_files\connection.cpp" />
     <ClCompile Include="..\QT_files\main.cpp" />
     <ClCompile Include="..\QT_files\mainwindow.cpp" />
-    <ClCompile Include="Cpp_projekt.cpp" />
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="..\QT_files\libdialog.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="..\QT_files\addaccount.h" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="..\QT_files\mainwindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\QT_files\connection.h" />
+    <ClInclude Include="..\QT_files\structures.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
