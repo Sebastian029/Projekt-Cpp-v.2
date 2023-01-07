@@ -14,6 +14,20 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     this->setWindowTitle("Biblioteka");
+
+      
+        
+        vector <Book> books = sq.spis();
+        
+        for (int i = 0; i < books.size(); i++) {
+            ui->tableWidget_ksiazki->insertRow(ui->tableWidget_ksiazki->rowCount());
+            ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books[i].title)));
+            ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(books[i].autor)));
+            ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(books[i].gatunek)));
+            ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 2, new QTableWidgetItem(books[i].liczba_stron));
+        }
+    
+    
 }
 
 MainWindow::~MainWindow()

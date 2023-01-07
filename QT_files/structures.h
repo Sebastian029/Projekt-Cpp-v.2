@@ -9,6 +9,7 @@ class Book {
 public:
     int id;
     string title;
+    string autor;
     string data_wydania;
     string gatunek;
     int liczba_stron;

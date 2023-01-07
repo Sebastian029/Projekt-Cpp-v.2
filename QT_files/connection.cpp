@@ -109,8 +109,9 @@ int Mysql_connector::login(string login, string haslo) {
     //delete pstmt;
 }
 
-vector <Book>  Mysql_connector::spis(vector<Book> books) {
+vector <Book>  Mysql_connector::spis() {
 
+    vector <Book> books;
     pstmt = con->prepareStatement("SELECT id_ksiazki, tytul FROM Ksiazki;");
     result = pstmt->executeQuery();
     while (result->next()) {
@@ -195,7 +196,7 @@ vector <Book>  Mysql_connector::wypozyczone(vector<Book> books, int id) {
     return books;
 };
 
-bool Mysql_connector::borrow_book(int user_id, string title) {
+bool Mysql_connector::borrow_book(string title) {
     int book_id = -1;
     //odnalezienie ksiazki
     try {
@@ -217,20 +218,21 @@ bool Mysql_connector::borrow_book(int user_id, string title) {
 
     // dodanie do wypozyczen
     pstmt = con->prepareStatement("INSERT INTO wypozyczenia (wypozyczenia.id_uzytkownika, wypozyczenia.id_ksiazki) VALUES (?, ?);");
-    pstmt->setInt(1, user_id);
+    pstmt->setInt(1, this->id);
     pstmt->setInt(2, book_id);
     pstmt->executeQuery();
 
     return 1;
 }
 
-bool Mysql_connector::return_book(int user_id, string title) {
+bool Mysql_connector::return_book(string title) {
     int book_id = -1;
+    
     //odnalezienie ksiazki
     try {
         pstmt = con->prepareStatement("SELECT ksiazki.id_ksiazki FROM ksiazki, wypozyczenia WHERE enable=0 AND tytul=? AND id_uzytkownika=? AND ksiazki.id_ksiazki=wypozyczenia.id_ksiazki LIMIT 1;");
         pstmt->setString(1, title);
-        pstmt->setInt(2, user_id);
+        pstmt->setInt(2, this->id);
         result = pstmt->executeQuery();
         result->next();
         book_id = result->getInt(1);

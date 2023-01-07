@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="page_3">
        <widget class="QWidget" name="formLayoutWidget">
@@ -431,20 +431,15 @@
              <attribute name="title">
               <string>Lista książek</string>
              </attribute>
-             <widget class="QTableWidget" name="tableWidget">
+             <widget class="QTableWidget" name="tableWidget_ksiazki">
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>10</y>
-                <width>341</width>
+                <y>0</y>
+                <width>531</width>
                 <height>251</height>
                </rect>
               </property>
-              <column>
-               <property name="text">
-                <string>Nowa kolumna</string>
-               </property>
-              </column>
               <column>
                <property name="text">
                 <string>Tytuł</string>
@@ -457,7 +452,12 @@
               </column>
               <column>
                <property name="text">
-                <string>Data wydania</string>
+                <string>Gatunek</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Liczba stron</string>
                </property>
               </column>
              </widget>

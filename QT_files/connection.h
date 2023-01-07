@@ -6,6 +6,7 @@
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
 #include <cppconn/prepared_statement.h>
+#include <QTableWidget>
 
 #include <iostream>
 #include <vector>
@@ -24,12 +25,12 @@ public:
 
     void add_book(std::string tytul, std::string gatunek);
     int login(std::string login, std::string haslo);
-    vector <Book> spis(vector<Book> books);
+    vector <Book> spis();
     vector <User> lista_uzytkownikow(vector<User> books);
     int create_account(string login, string password);
     vector <Book> wypozyczone(vector<Book> books, int id);
-    bool borrow_book(int id, string title);
-    bool return_book(int id, string title);
+    bool borrow_book(string title);
+    bool return_book(string title);
 
 };
 
