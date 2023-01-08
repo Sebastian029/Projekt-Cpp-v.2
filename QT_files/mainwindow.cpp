@@ -6,6 +6,8 @@ Mysql_connector sq;
 // 1- rejestracja
 // 0 -menu
 
+
+
 void MainWindow::init_users() {
     ui->tableWidget_uzytkownicy->setRowCount(0);
     vector <User> users = sq.lista_uzytkownikow();
@@ -59,6 +61,17 @@ void MainWindow::init_oddawanie(){
 
 }
 
+void MainWindow::init_spis() {
+    ui->tableWidget_wypozyczanie->setRowCount(0);
+    vector <Book> books = sq.spis();
+    for (int i = 0; i < books.size(); i++) {
+        ui->tableWidget_wypozyczanie->insertRow(ui->tableWidget_wypozyczanie->rowCount());
+        ui->tableWidget_wypozyczanie->setItem(ui->tableWidget_wypozyczanie->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books[i].title)));
+        
+    }
+
+}
+
 
 
 
@@ -74,11 +87,11 @@ MainWindow::MainWindow(QWidget *parent)
     init_users();
     init_books();
     init_borrowed();
+    init_spis();
      
      ui->tableWidget_wypozyczenia->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     
-
-     //ui->calendarWidget->
+     
 
 }
 
@@ -113,7 +126,15 @@ void MainWindow::on_pushButton_zaloguj_clicked()
         init_books();
         init_borrowed();
         init_oddawanie();
-       // ui->stackedWidget->widget(2)->repaint();
+       
+
+        
+        QTextCharFormat tmp;
+        tmp.setBackground(QColor(235, 215, 145,100));
+        ui->calendarWidget->setDateTextFormat(QDate(2023,1,3),tmp);
+        
+        
+
     }
     // QMessageBox::information(this,"Podane informacje","Wprowadzono login: "+log+" oraz hasło: "+pass);
 }
@@ -205,3 +226,35 @@ void MainWindow::on_pushButton_oddawanie_clicked()
 }
 
 
+void MainWindow::on_tableWidget_wypozyczanie_cellClicked(int row, int column)
+{
+    QString tmp = ui->tableWidget_wypozyczanie->item(row, 0)->text();
+    
+    for(int i = 0; i< ui->tableWidget_wybrane_ksiazki->rowCount(); i++) {
+        if (tmp == ui->tableWidget_wybrane_ksiazki->item(i, 0)->text()) {
+            QMessageBox::information(this, "Blad", "Ksiazka o wybranym tytule zostala juz dodana do listy");
+            return;
+        }
+    }
+
+    ui->tableWidget_wybrane_ksiazki->insertRow(ui->tableWidget_wybrane_ksiazki->rowCount());
+    ui->tableWidget_wybrane_ksiazki->setItem(ui->tableWidget_wybrane_ksiazki->rowCount() - 1, 0, new QTableWidgetItem(tmp));
+   
+}
+
+void MainWindow::on_tableWidget_wybrane_ksiazki_cellClicked(int row, int column)
+{
+    ui->tableWidget_wybrane_ksiazki->removeRow(row);
+
+}
+
+void MainWindow::on_pushButton_wypozycz_clicked()
+{
+    
+    for (int i = 0; i < ui->tableWidget_wybrane_ksiazki->rowCount(); i++) {
+        sq.borrow_book(ui->tableWidget_wybrane_ksiazki->item(i, 0)->text().toStdString());
+        //QMessageBox::information(this, "Blad", (ui->tableWidget_wybrane_ksiazki->item(i, 0)->text()));
+        
+    }
+
+}

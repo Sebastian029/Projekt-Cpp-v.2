@@ -208,7 +208,7 @@ int Mysql_connector::borrow_book(string title) {
     int book_id = -1;
     //odnalezienie ksiazki
     try {
-        pstmt = con->prepareStatement("SELECT id_ksiazki FROM ksiazki WHERE tytul=? AND enable=1 LIMIT 1");
+        pstmt = con->prepareStatement("SELECT id_ksiazki FROM ksiazki WHERE tytul=? AND enable=1 LIMIT 1;");
         pstmt->setString(1, title);
         result = pstmt->executeQuery();
         result->next();
@@ -218,21 +218,24 @@ int Mysql_connector::borrow_book(string title) {
         cout << "Brak dostepnosci podanej ksiazki";
         return 0;
     }
+   
 
     // zmiana dostepsnosci ksiazki
     pstmt = con->prepareStatement("UPDATE ksiazki SET enable=0 WHERE id_ksiazki=?;");
     pstmt->setInt(1, book_id);
     pstmt->executeQuery();
 
+    
     // dodanie do wypozyczen
-    pstmt = con->prepareStatement("INSERT INTO wypozyczenia (id_uzytkownika, id_ksiazki, data_wypozyczenia, data oddania) VALUES (?, ?, date_format(NOW(), '%d.%m.%Y'), date_format(DATE_ADD(NOW(), INTERVAL 1 MONTH), '%d.%m.%Y'));");
+    pstmt = con->prepareStatement("INSERT INTO wypozyczenia (id_uzytkownika, id_ksiazki, data_wypozyczenia, data_oddania) VALUES (?, ?, date_format(NOW(), '%d.%m.%Y'), date_format(DATE_ADD(NOW(), INTERVAL 1 MONTH), '%d.%m.%Y'));");
     pstmt->setInt(1, this->id);
     pstmt->setInt(2, book_id);
     pstmt->executeQuery();
-
+ 
     // borrowed books + 1
     pstmt = con->prepareStatement("UPDATE uzytkownicy SET num_of_borrowed_books = num_of_borrowed_books + 1 WHERE id_uzytkownika = ?;");
     pstmt->setInt(1, this->id);
+    pstmt->executeQuery();
 
 
     return 1;

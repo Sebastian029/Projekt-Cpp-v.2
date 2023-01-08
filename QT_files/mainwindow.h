@@ -6,6 +6,10 @@
 #include <QLineEdit>
 #include <QString>
 #include <QList>
+
+#include <QColor>
+
+#include <QTextFormat>
 #include "connection.h"
 
 QT_BEGIN_NAMESPACE
@@ -27,13 +31,18 @@ private slots:
     void on_pushButton_wyloguj_clicked();
     void on_pushButton_anuluj_clicked();
     void on_pushButton_oddawanie_clicked();
+    void on_pushButton_wypozycz_clicked();
+    void on_tableWidget_wypozyczanie_cellClicked(int row, int column);
+    void on_tableWidget_wybrane_ksiazki_cellClicked(int row, int column);
 private:
     Ui::MainWindow *ui;
     void init_users();
     void init_books();
     void init_borrowed();
     void init_oddawanie();
-
+    void init_spis();
+  
+    
   
 };
 #endif // MAINWINDOW_H
