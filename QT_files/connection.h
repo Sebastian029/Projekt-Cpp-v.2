@@ -26,11 +26,12 @@ public:
     void add_book(std::string tytul, std::string gatunek);
     int login(std::string login, std::string haslo);
     vector <Book> spis();
-    vector <User> lista_uzytkownikow(vector<User> books);
+    vector <User> lista_uzytkownikow();
     int create_account(string login, string password);
     vector <Book> wypozyczone(vector<Book> books, int id);
     bool borrow_book(string title);
     bool return_book(string title);
+    vector <Borrowed_books> borrowed_list();
 
 };
 

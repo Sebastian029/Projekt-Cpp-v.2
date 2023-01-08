@@ -60,8 +60,8 @@ Mysql_connector::Mysql_connector() {
 
 
     stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books) VALUES ('mylogin', 'mypasswordddd', 0);");
-    stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books) VALUES ('mycos', 'mypasads', 1);");
-    stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books) VALUES ('LOGIN', 'HASLO', 2);");
+    stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books) VALUES ('mycos', 'mypasads', 0);");
+    stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books) VALUES ('LOGIN', 'HASLO', 0);");
 
     stmt->execute("INSERT INTO Ksiazki (tytul,enable) VALUES ('TytulKsiazki',1);");
     stmt->execute("INSERT INTO Ksiazki (tytul,enable) VALUE ('TytulKsiazki1',1);");
@@ -70,10 +70,10 @@ Mysql_connector::Mysql_connector() {
     stmt->execute("INSERT INTO Ksiazki (tytul,enable) VALUE ('TytulKsi12',1);");
 
 
-    //stmt->execute("INSERT INTO Wypozyczenia (id_uzytkownika, id_ksiazki) VALUES (1, 2);");
-    //stmt->execute("INSERT INTO Wypozyczenia (id_uzytkownika, id_ksiazki) VALUES (1, 1);");
-    //stmt->execute("INSERT INTO Wypozyczenia (id_uzytkownika, id_ksiazki) VALUES (2, 3);");
-    //stmt->execute("INSERT INTO Wypozyczenia (id_uzytkownika, id_ksiazki) VALUES (3, 4);");
+    stmt->execute("INSERT INTO Wypozyczenia (id_uzytkownika, id_ksiazki) VALUES (1, 2);");
+    stmt->execute("INSERT INTO Wypozyczenia (id_uzytkownika, id_ksiazki) VALUES (1, 1);");
+    stmt->execute("INSERT INTO Wypozyczenia (id_uzytkownika, id_ksiazki) VALUES (2, 3);");
+    stmt->execute("INSERT INTO Wypozyczenia (id_uzytkownika, id_ksiazki) VALUES (3, 4);");
 
 
 }
@@ -129,9 +129,10 @@ vector <Book>  Mysql_connector::spis() {
 };
 
 
-vector <User>  Mysql_connector::lista_uzytkownikow(vector<User> users) {
+vector <User>  Mysql_connector::lista_uzytkownikow() {
 
-    pstmt = con->prepareStatement("SELECT id_uzytkownika, login FROM Uzytkownicy;");
+    vector<User> users;
+    pstmt = con->prepareStatement("SELECT id_uzytkownika, login, num_of_borrowed_books FROM Uzytkownicy;");
     result = pstmt->executeQuery();
     while (result->next()) {
         //printf("Reading from table=(%d, %s, %s, %d)\n", result->getInt(1), result->getString(2).c_str(), result->getString(3).c_str(), result->getInt(4));
@@ -141,6 +142,10 @@ vector <User>  Mysql_connector::lista_uzytkownikow(vector<User> users) {
 
         temp.login = "";
         temp.login = result->getString(2).c_str();
+        
+        temp.num_of_borrowed_books = -1;
+        temp.num_of_borrowed_books = result->getInt(3);
+
         users.push_back(temp);
     }
 
@@ -222,6 +227,12 @@ bool Mysql_connector::borrow_book(string title) {
     pstmt->setInt(2, book_id);
     pstmt->executeQuery();
 
+    // borrowed books + 1
+    pstmt = con->prepareStatement("UPDATE uzytkownicy SET num_of_borrowed_books = num_of_borrowed_books + 1 WHERE id_uzytkownika = ?;");
+    pstmt->setInt(1, this->id);
+
+
+
     return 1;
 }
 
@@ -253,4 +264,39 @@ bool Mysql_connector::return_book(string title) {
     pstmt->executeQuery();
 
     return 1;
+}
+
+vector <Borrowed_books> Mysql_connector::borrowed_list()     {
+    
+    vector <Borrowed_books> borrowed;
+
+    pstmt = con->prepareStatement("SELECT uzytkownicy.id_uzytkownika, ksiazki.id_ksiazki, login, tytul, data_wypozyczenia, data_oddania FROM ksiazki, uzytkownicy, wypozyczenia WHERE wypozyczenia.id_uzytkownika = uzytkownicy.id_uzytkownika AND wypozyczenia.id_ksiazki = ksiazki.id_ksiazki;");
+    result = pstmt->executeQuery();
+
+    while (result->next()) {
+        Borrowed_books item;
+
+        item.id_uzytkownika = -1;
+        item.id_uzytkownika = result->getInt(1);
+
+        item.id_ksiazki = -1;
+        item.id_ksiazki = result->getInt(2);
+
+        item.login = "";
+        item.login = result->getString(3).c_str();
+
+        item.tytul = "";
+        item.tytul = result->getString(4).c_str();
+
+        item.data_wypozyczenia = "";
+        item.data_wypozyczenia = result->getString(5).c_str();
+
+        item.data_oddania = "";
+        item.data_oddania = result->getString(6).c_str();
+
+        borrowed.push_back(item);
+    }
+
+    return borrowed;
+
 }

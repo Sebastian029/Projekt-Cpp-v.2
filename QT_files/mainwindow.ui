@@ -180,7 +180,11 @@
             <widget class="QLineEdit" name="lineEdit_login"/>
            </item>
            <item row="4" column="1">
-            <widget class="QLineEdit" name="lineEdit_haslo"/>
+            <widget class="QLineEdit" name="lineEdit_haslo">
+             <property name="echoMode">
+              <enum>QLineEdit::Password</enum>
+             </property>
+            </widget>
            </item>
            <item row="6" column="2">
             <spacer name="horizontalSpacer">
@@ -400,9 +404,9 @@
           <item row="1" column="0" colspan="5">
            <widget class="QTabWidget" name="tabWidget">
             <property name="currentIndex">
-             <number>3</number>
+             <number>4</number>
             </property>
-            <widget class="QWidget" name="wyp">
+            <widget class="QWidget" name="wypozyczenie">
              <attribute name="title">
               <string>Wypożyczanie</string>
              </attribute>
@@ -417,17 +421,42 @@
               </property>
              </widget>
             </widget>
-            <widget class="QWidget" name="odd">
+            <widget class="QWidget" name="oddawanie">
              <attribute name="title">
               <string>Oddawanie</string>
              </attribute>
             </widget>
-            <widget class="QWidget" name="tab">
+            <widget class="QWidget" name="uzytkownicy">
              <attribute name="title">
               <string>Lista użytkowników</string>
              </attribute>
+             <widget class="QTableWidget" name="tableWidget_uzytkownicy">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>551</width>
+                <height>271</height>
+               </rect>
+              </property>
+              <column>
+               <property name="text">
+                <string>ID</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Login</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Liczba wypozyczonych</string>
+               </property>
+              </column>
+             </widget>
             </widget>
-            <widget class="QWidget" name="tab_2">
+            <widget class="QWidget" name="ksiazki">
              <attribute name="title">
               <string>Lista książek</string>
              </attribute>
@@ -458,6 +487,51 @@
               <column>
                <property name="text">
                 <string>Liczba stron</string>
+               </property>
+              </column>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="wypozyczenia">
+             <attribute name="title">
+              <string>Wypozyczenia</string>
+             </attribute>
+             <widget class="QTableWidget" name="tableWidget_wypozyczenia">
+              <property name="geometry">
+               <rect>
+                <x>20</x>
+                <y>10</y>
+                <width>681</width>
+                <height>261</height>
+               </rect>
+              </property>
+              <column>
+               <property name="text">
+                <string>id_uzytkownika</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>id_ksiazki</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>login</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>tytul</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>d_wypozyczenia</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>d_oddania</string>
                </property>
               </column>
              </widget>

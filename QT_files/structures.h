@@ -23,5 +23,15 @@ public:
 
 };
 
+class Borrowed_books {
+public:
+    int id_uzytkownika;
+    int id_ksiazki;
+    string login;
+    string tytul;
+    string data_wypozyczenia;
+    string data_oddania;
+};
+
 
 #endif

@@ -18,14 +18,35 @@ MainWindow::MainWindow(QWidget *parent)
       
         
         vector <Book> books = sq.spis();
-        
         for (int i = 0; i < books.size(); i++) {
             ui->tableWidget_ksiazki->insertRow(ui->tableWidget_ksiazki->rowCount());
             ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books[i].title)));
             ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(books[i].autor)));
             ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(books[i].gatunek)));
-            ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 2, new QTableWidgetItem(books[i].liczba_stron));
+            ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 3, new QTableWidgetItem(books[i].liczba_stron));
         }
+
+        vector <User> users = sq.lista_uzytkownikow();
+        for (int i = 0; i < users.size(); i++) {
+            ui->tableWidget_uzytkownicy->insertRow(ui->tableWidget_uzytkownicy->rowCount());
+            ui->tableWidget_uzytkownicy->setItem(ui->tableWidget_uzytkownicy->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(to_string(users[i].id))));
+            ui->tableWidget_uzytkownicy->setItem(ui->tableWidget_uzytkownicy->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(users[i].login)));
+            ui->tableWidget_uzytkownicy->setItem(ui->tableWidget_uzytkownicy->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(to_string(users[i].num_of_borrowed_books))))   ;
+
+        }
+
+        vector <Borrowed_books> borrowed = sq.borrowed_list();
+        for (int i = 0; i < borrowed.size(); i++) {
+            ui->tableWidget_wypozyczenia->insertRow(ui->tableWidget_wypozyczenia->rowCount());
+            ui->tableWidget_wypozyczenia->setItem(ui->tableWidget_wypozyczenia->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(to_string(borrowed[i].id_uzytkownika))));
+            ui->tableWidget_wypozyczenia->setItem(ui->tableWidget_wypozyczenia->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(to_string(borrowed[i].id_ksiazki))));
+            ui->tableWidget_wypozyczenia->setItem(ui->tableWidget_wypozyczenia->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(borrowed[i].login)));
+            ui->tableWidget_wypozyczenia->setItem(ui->tableWidget_wypozyczenia->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(borrowed[i].tytul)));
+            ui->tableWidget_wypozyczenia->setItem(ui->tableWidget_wypozyczenia->rowCount() - 1, 4, new QTableWidgetItem(QString::fromStdString(borrowed[i].data_wypozyczenia)));
+            ui->tableWidget_wypozyczenia->setItem(ui->tableWidget_wypozyczenia->rowCount() - 1, 5, new QTableWidgetItem(QString::fromStdString(borrowed[i].data_oddania)));
+                 }
+
+
     
     
 }
