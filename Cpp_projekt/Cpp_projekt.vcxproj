@@ -108,6 +108,9 @@
     <ClInclude Include="..\QT_files\connection.h" />
     <ClInclude Include="..\QT_files\structures.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\QT_files\books_icon.ico" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />

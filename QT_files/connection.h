@@ -12,7 +12,7 @@
 #include <vector>
 #include "structures.h"
 
-class Mysql_connector {
+class Mysql_connector{
 public:
     sql::Driver* driver;
     sql::Connection* con;
@@ -27,9 +27,9 @@ public:
     int login(std::string login, std::string haslo);
     vector <Book> spis();
     vector <User> lista_uzytkownikow();
-    int create_account(string login, string password);
-    vector <Book> wypozyczone(vector<Book> books, int id);
-    bool borrow_book(string title);
+    int create_account(string login, string password, string email, int nr_tel);
+    vector <Book> wypozyczone();
+    int borrow_book(string title);
     bool return_book(string title);
     vector <Borrowed_books> borrowed_list();
 

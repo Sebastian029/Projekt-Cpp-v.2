@@ -48,9 +48,9 @@ Mysql_connector::Mysql_connector() {
     stmt->execute("DROP TABLE IF EXISTS Uzytkownicy");
     cout << "Finished dropping table (if existed)" << endl;
 
-    stmt->execute("CREATE TABLE Uzytkownicy (id_uzytkownika INT AUTO_INCREMENT, login VARCHAR(30),haslo VARCHAR(30), num_of_borrowed_books INTEGER, PRIMARY KEY(id_uzytkownika));");
+    stmt->execute("CREATE TABLE Uzytkownicy (id_uzytkownika INT AUTO_INCREMENT, login VARCHAR(30), haslo VARCHAR(30), email VARCHAR(30), nr_telefonu INTEGER, num_of_borrowed_books INTEGER, admin BIT, PRIMARY KEY(id_uzytkownika));");
     stmt->execute("CREATE TABLE Ksiazki (id_ksiazki INT AUTO_INCREMENT, enable BOOLEAN, tytul VARCHAR(30), autor VARCHAR(30), gatunek VARCHAR(20), data_wydania DATE, liczba_stron INT, PRIMARY KEY(id_ksiazki));");
-    stmt->execute("CREATE TABLE Wypozyczenia (id_wypozyczenia INT AUTO_INCREMENT,id_uzytkownika INT, id_ksiazki INT UNIQUE, data_wypozyczenia DATE, data_oddania DATE, PRIMARY KEY(id_wypozyczenia), FOREIGN KEY (id_uzytkownika) REFERENCES Uzytkownicy(id_uzytkownika), FOREIGN KEY (id_ksiazki) REFERENCES Ksiazki(id_ksiazki));");
+    stmt->execute("CREATE TABLE Wypozyczenia (id_wypozyczenia INT AUTO_INCREMENT,id_uzytkownika INT, id_ksiazki INT UNIQUE, data_wypozyczenia VARCHAR(20), data_oddania VARCHAR(20), PRIMARY KEY(id_wypozyczenia), FOREIGN KEY (id_uzytkownika) REFERENCES Uzytkownicy(id_uzytkownika), FOREIGN KEY (id_ksiazki) REFERENCES Ksiazki(id_ksiazki));");
 
     cout << "Finished creating tables" << endl;
     //stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books) VALUES ('mylogin', 'mypasswordddd', 1);");
@@ -70,10 +70,12 @@ Mysql_connector::Mysql_connector() {
     stmt->execute("INSERT INTO Ksiazki (tytul,enable) VALUE ('TytulKsi12',1);");
 
 
-    stmt->execute("INSERT INTO Wypozyczenia (id_uzytkownika, id_ksiazki) VALUES (1, 2);");
+    stmt->execute("INSERT INTO Wypozyczenia (id_uzytkownika, id_ksiazki, data_oddania) VALUES (1, 2, date_format(NOW(), '%d.%m.%Y'));");
     stmt->execute("INSERT INTO Wypozyczenia (id_uzytkownika, id_ksiazki) VALUES (1, 1);");
     stmt->execute("INSERT INTO Wypozyczenia (id_uzytkownika, id_ksiazki) VALUES (2, 3);");
     stmt->execute("INSERT INTO Wypozyczenia (id_uzytkownika, id_ksiazki) VALUES (3, 4);");
+
+    
 
 
 }
@@ -128,7 +130,6 @@ vector <Book>  Mysql_connector::spis() {
     return books;
 };
 
-
 vector <User>  Mysql_connector::lista_uzytkownikow() {
 
     vector<User> users;
@@ -152,7 +153,7 @@ vector <User>  Mysql_connector::lista_uzytkownikow() {
     return users;
 };
 
-int Mysql_connector::create_account(string login, string password) {
+int Mysql_connector::create_account(string login, string password, string email, int nr_tel) {
     sql::PreparedStatement* pstmt;
     list <string> logins;
     pstmt = con->prepareStatement("SELECT login FROM Uzytkownicy;");
@@ -165,21 +166,23 @@ int Mysql_connector::create_account(string login, string password) {
     }
 
 
-    pstmt = con->prepareStatement("INSERT INTO Uzytkownicy(login, haslo, num_of_borrowed_books) VALUES(?,?,?)");
+    pstmt = con->prepareStatement("INSERT INTO Uzytkownicy(login, haslo, email, nr_telefonu, num_of_borrowed_books, admin) VALUES(?,?,?,?,?,?)");
     pstmt->setString(1, login);
     pstmt->setString(2, password);
-    pstmt->setInt(3, 0);
+    pstmt->setString(3, email);
+    pstmt->setInt(4, nr_tel);
+    pstmt->setInt(5, 0);
+    pstmt->setInt(6, 0);
     pstmt->execute();
 
     cout << "Dodano uzytkownika";
     return 1;
 }
 
+vector <Book>  Mysql_connector::wypozyczone() {
 
-
-vector <Book>  Mysql_connector::wypozyczone(vector<Book> books, int id) {
-
-    if (id < 0) {
+    vector<Book> books;
+    if (this->id < 0) {
         cout << "Nie zalogwany uzytkownik";
         return books;
     }
@@ -201,7 +204,7 @@ vector <Book>  Mysql_connector::wypozyczone(vector<Book> books, int id) {
     return books;
 };
 
-bool Mysql_connector::borrow_book(string title) {
+int Mysql_connector::borrow_book(string title) {
     int book_id = -1;
     //odnalezienie ksiazki
     try {
@@ -222,7 +225,7 @@ bool Mysql_connector::borrow_book(string title) {
     pstmt->executeQuery();
 
     // dodanie do wypozyczen
-    pstmt = con->prepareStatement("INSERT INTO wypozyczenia (wypozyczenia.id_uzytkownika, wypozyczenia.id_ksiazki) VALUES (?, ?);");
+    pstmt = con->prepareStatement("INSERT INTO wypozyczenia (id_uzytkownika, id_ksiazki, data_wypozyczenia, data oddania) VALUES (?, ?, date_format(NOW(), '%d.%m.%Y'), date_format(DATE_ADD(NOW(), INTERVAL 1 MONTH), '%d.%m.%Y'));");
     pstmt->setInt(1, this->id);
     pstmt->setInt(2, book_id);
     pstmt->executeQuery();
@@ -230,7 +233,6 @@ bool Mysql_connector::borrow_book(string title) {
     // borrowed books + 1
     pstmt = con->prepareStatement("UPDATE uzytkownicy SET num_of_borrowed_books = num_of_borrowed_books + 1 WHERE id_uzytkownika = ?;");
     pstmt->setInt(1, this->id);
-
 
 
     return 1;
