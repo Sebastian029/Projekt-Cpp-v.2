@@ -48,7 +48,14 @@ void MainWindow::init_borrowed() {
 
 void MainWindow::init_oddawanie(){
 
+    ui->comboBox_oddawanie->clear();
     vector <Book> books = sq.wypozyczone();
+    QStringList q_list;
+    for (int i = 0; i < books.size(); i++)
+        q_list.push_back(QString::fromStdString(books[i].title));
+
+    ui->comboBox_oddawanie->addItems(q_list);
+    
 
 }
 
@@ -70,6 +77,9 @@ MainWindow::MainWindow(QWidget *parent)
      
      ui->tableWidget_wypozyczenia->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     
+
+     //ui->calendarWidget->
+
 }
 
 MainWindow::~MainWindow()
@@ -103,7 +113,7 @@ void MainWindow::on_pushButton_zaloguj_clicked()
         init_books();
         init_borrowed();
         init_oddawanie();
-        ui->stackedWidget->widget(2)->repaint();
+       // ui->stackedWidget->widget(2)->repaint();
     }
     // QMessageBox::information(this,"Podane informacje","Wprowadzono login: "+log+" oraz hasło: "+pass);
 }
@@ -186,7 +196,12 @@ void MainWindow::on_pushButton_wyloguj_clicked()
 
 void MainWindow::on_pushButton_oddawanie_clicked()
 {
-    
+    QString book_title = ui->comboBox_oddawanie->currentText();
+    sq.return_book(book_title.toStdString());
+    QMessageBox::information(this, "Sukces", "Zwrocono ksiazke pt. " + book_title);
+    init_borrowed();
+    init_oddawanie();
+
 }
 
 

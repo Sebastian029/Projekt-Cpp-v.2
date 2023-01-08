@@ -59,12 +59,12 @@ Mysql_connector::Mysql_connector() {
 
 
 
-    stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books) VALUES ('mylogin', 'mypasswordddd', 0);");
+    stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books) VALUES ('qwe', 'asd', 0);");
     stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books) VALUES ('mycos', 'mypasads', 0);");
     stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books) VALUES ('LOGIN', 'HASLO', 0);");
 
-    stmt->execute("INSERT INTO Ksiazki (tytul,enable) VALUES ('TytulKsiazki',1);");
-    stmt->execute("INSERT INTO Ksiazki (tytul,enable) VALUE ('TytulKsiazki1',1);");
+    stmt->execute("INSERT INTO Ksiazki (tytul,enable) VALUES ('TytulKsiazki',0);");
+    stmt->execute("INSERT INTO Ksiazki (tytul,enable) VALUE ('TytulKsiazki1',0);");
     stmt->execute("INSERT INTO Ksiazki (tytul,enable) VALUE ('TytulKsiazki112',1);");
     stmt->execute("INSERT INTO Ksiazki (tytul,enable) VALUE ('TytulKsiazki12',1);");
     stmt->execute("INSERT INTO Ksiazki (tytul,enable) VALUE ('TytulKsi12',1);");
@@ -189,7 +189,7 @@ vector <Book>  Mysql_connector::wypozyczone() {
 
 
     pstmt = con->prepareStatement("SELECT ksiazki.id_ksiazki, ksiazki.tytul FROM ksiazki, Wypozyczenia, Uzytkownicy WHERE uzytkownicy.id_uzytkownika = wypozyczenia.id_uzytkownika AND wypozyczenia.id_ksiazki = ksiazki.id_ksiazki AND uzytkownicy.id_uzytkownika=?;");
-    pstmt->setInt(1, id);
+    pstmt->setInt(1, this->id);
     result = pstmt->executeQuery();
     while (result->next()) {
         Book temp;
@@ -302,3 +302,4 @@ vector <Borrowed_books> Mysql_connector::borrowed_list()     {
     return borrowed;
 
 }
+
