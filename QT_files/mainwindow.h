@@ -10,6 +10,8 @@
 #include <QColor>
 
 #include <QTextFormat>
+#include <string>
+#include <cctype>
 #include "connection.h"
 
 QT_BEGIN_NAMESPACE
@@ -28,12 +30,16 @@ private slots:
     void on_pushButton_zaloguj_clicked();
     void on_pushButton_zarejestruj_clicked();
     void on_pushButton_zaloz_clicked();
+    void on_pushButton_pokaz_haslo_pressed();
+    void on_pushButton_pokaz_haslo_released();
     void on_pushButton_wyloguj_clicked();
     void on_pushButton_anuluj_clicked();
     void on_pushButton_oddawanie_clicked();
     void on_pushButton_wypozycz_clicked();
     void on_tableWidget_wypozyczanie_cellClicked(int row, int column);
     void on_tableWidget_wybrane_ksiazki_cellClicked(int row, int column);
+    void on_pushButton_szukaj_clicked();
+    void on_pushButton_filtry_clicked();
 private:
     Ui::MainWindow *ui;
     void init_users();

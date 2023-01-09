@@ -21,6 +21,7 @@ Mysql_connector::~Mysql_connector() {
     delete pstmt;
     delete stmt;
     delete con;
+    
 }
 
 
@@ -306,3 +307,71 @@ vector <Borrowed_books> Mysql_connector::borrowed_list()     {
 
 }
 
+vector <Book>  Mysql_connector::spis_dostepnych() {
+
+    vector <Book> books;
+    pstmt = con->prepareStatement("SELECT id_ksiazki, tytul FROM Ksiazki WHERE enable=1;");
+    result = pstmt->executeQuery();
+    while (result->next()) {
+        //printf("Reading from table=(%d, %s, %s, %d)\n", result->getInt(1), result->getString(2).c_str(), result->getString(3).c_str(), result->getInt(4));
+        Book temp;
+        temp.id = -1;
+        temp.id = result->getInt(1);
+
+        temp.title = "";
+        temp.title = result->getString(2).c_str();
+        books.push_back(temp);
+    }
+
+    return books;
+
+}
+
+vector <Book>  Mysql_connector::spis_wybranych(string kategoria, string wybor){
+    vector <Book> books;
+
+    if (kategoria == "Tytul") {
+        pstmt = con->prepareStatement("SELECT id_ksiazki, tytul FROM Ksiazki WHERE enable = 1 AND tytul=?;");
+        pstmt->setString(1, wybor);
+        result = pstmt->executeQuery();
+        while (result->next()) {
+            Book temp;
+            temp.id = -1;
+            temp.id = result->getInt(1);
+
+            temp.title = "";
+            temp.title = result->getString(2).c_str();
+            books.push_back(temp);
+        }
+    }
+    else if (kategoria == "Autor") {
+        pstmt = con->prepareStatement("SELECT id_ksiazki, tytul FROM Ksiazki WHERE enable = 1 AND autor=?;");
+        pstmt->setString(1, wybor);
+        result = pstmt->executeQuery();
+        while (result->next()) {
+            Book temp;
+            temp.id = -1;
+            temp.id = result->getInt(1);
+
+            temp.title = "";
+            temp.title = result->getString(2).c_str();
+            books.push_back(temp);
+        }
+    }
+    else if (kategoria == "Gatunek") {
+        pstmt = con->prepareStatement("SELECT id_ksiazki, tytul FROM Ksiazki WHERE enable = 1 AND gatunek=?;");
+        pstmt->setString(1, wybor);
+        result = pstmt->executeQuery();
+        while (result->next()) {
+            Book temp;
+            temp.id = -1;
+            temp.id = result->getInt(1);
+
+            temp.title = "";
+            temp.title = result->getString(2).c_str();
+            books.push_back(temp);
+        }
+    }
+
+    return books;
+}

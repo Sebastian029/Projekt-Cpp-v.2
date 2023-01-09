@@ -32,6 +32,8 @@ public:
     int borrow_book(string title);
     bool return_book(string title);
     vector <Borrowed_books> borrowed_list();
+    vector <Book> spis_dostepnych();
+    vector <Book> spis_wybranych(string kategoria, string wybor);
 
 };
 

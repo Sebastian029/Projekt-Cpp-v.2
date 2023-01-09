@@ -63,7 +63,7 @@ void MainWindow::init_oddawanie(){
 
 void MainWindow::init_spis() {
     ui->tableWidget_wypozyczanie->setRowCount(0);
-    vector <Book> books = sq.spis();
+    vector <Book> books = sq.spis_dostepnych();
     for (int i = 0; i < books.size(); i++) {
         ui->tableWidget_wypozyczanie->insertRow(ui->tableWidget_wypozyczanie->rowCount());
         ui->tableWidget_wypozyczanie->setItem(ui->tableWidget_wypozyczanie->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books[i].title)));
@@ -71,8 +71,6 @@ void MainWindow::init_spis() {
     }
 
 }
-
-
 
 
 
@@ -118,6 +116,7 @@ void MainWindow::on_pushButton_zaloguj_clicked()
         ui->stackedWidget->widget(0)->hide();
         ui->stackedWidget->widget(1)->hide();
         ui->stackedWidget->widget(2)->show();
+        ui->stackedWidget->setCurrentWidget(ui->stackedWidget->widget(2));
         ui->label_zalogowano_login->setText(log);
         ui->lineEdit_login->clear();
         ui->lineEdit_haslo->clear();
@@ -145,6 +144,7 @@ void MainWindow::on_pushButton_zarejestruj_clicked()
     ui->stackedWidget->widget(0)->hide();
     ui->stackedWidget->widget(2)->hide();
     ui->stackedWidget->widget(1)->show();
+    ui->stackedWidget->setCurrentWidget(ui->stackedWidget->widget(1));
 }
 
 void MainWindow::on_pushButton_zaloz_clicked()
@@ -187,11 +187,13 @@ void MainWindow::on_pushButton_zaloz_clicked()
         ui->stackedWidget->widget(2)->hide();
         ui->stackedWidget->widget(1)->hide();
         ui->stackedWidget->widget(0)->show();
+        ui->stackedWidget->setCurrentWidget(ui->stackedWidget->widget(0));
 
         ui->lineEdit_login_2->clear();
         ui->lineEdit_haslo_2->clear(); 
         ui->lineEdit_email_2->clear(); 
         ui->lineEdit_telefon_2->clear();
+
 
     }
     else if(done == -1){
@@ -200,19 +202,30 @@ void MainWindow::on_pushButton_zaloz_clicked()
   
    
 }
+
+void MainWindow::on_pushButton_pokaz_haslo_pressed() {
+
+    ui->lineEdit_haslo_2->setEchoMode(QLineEdit::Normal);
+
+}
+void MainWindow::on_pushButton_pokaz_haslo_released() {
+
+    ui->lineEdit_haslo_2->setEchoMode(QLineEdit::Password);
+
+}
 void MainWindow::on_pushButton_anuluj_clicked() {
     ui->stackedWidget->widget(2)->hide();
     ui->stackedWidget->widget(1)->hide();
     ui->stackedWidget->widget(0)->show();
+    ui->stackedWidget->setCurrentWidget(ui->stackedWidget->widget(0));
 }
-
-
 
 void MainWindow::on_pushButton_wyloguj_clicked()
 {
     ui->stackedWidget->widget(2)->hide();
     ui->stackedWidget->widget(1)->hide();
     ui->stackedWidget->widget(0)->show();
+    ui->stackedWidget->setCurrentWidget(ui->stackedWidget->widget(0));
 }
 
 void MainWindow::on_pushButton_oddawanie_clicked()
@@ -222,6 +235,7 @@ void MainWindow::on_pushButton_oddawanie_clicked()
     QMessageBox::information(this, "Sukces", "Zwrocono ksiazke pt. " + book_title);
     init_borrowed();
     init_oddawanie();
+    init_spis();
 
 }
 
@@ -254,7 +268,40 @@ void MainWindow::on_pushButton_wypozycz_clicked()
     for (int i = 0; i < ui->tableWidget_wybrane_ksiazki->rowCount(); i++) {
         sq.borrow_book(ui->tableWidget_wybrane_ksiazki->item(i, 0)->text().toStdString());
         //QMessageBox::information(this, "Blad", (ui->tableWidget_wybrane_ksiazki->item(i, 0)->text()));
-        
     }
+    
+    if(ui->tableWidget_wybrane_ksiazki->rowCount()==0)
+        QMessageBox::information(this, "Blad", "Nie wybrano ksiazek do wypozyczenia");
+    else
+         QMessageBox::information(this, "Sukces", "Pomyslnie wypozyczono wybrane ksiazki");
+    ui->tableWidget_wybrane_ksiazki->setRowCount(0);
+    init_spis();
+    init_oddawanie();
+    init_borrowed();
 
+    
+
+
+}
+
+void MainWindow::on_pushButton_szukaj_clicked() {
+
+    QString kategoria = ui->comboBox_selekcja->currentText();
+    QString wybor = ui->lineEdit_selekcja->text();
+
+  
+    ui->tableWidget_wypozyczanie->setRowCount(0);
+    vector <Book> books = sq.spis_wybranych(kategoria.toStdString(), wybor.toStdString());
+    for (int i = 0; i < books.size(); i++) {
+        ui->tableWidget_wypozyczanie->insertRow(ui->tableWidget_wypozyczanie->rowCount());
+        ui->tableWidget_wypozyczanie->setItem(ui->tableWidget_wypozyczanie->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books[i].title)));
+
+    }
+    
+    
+}
+
+void MainWindow::on_pushButton_filtry_clicked() {
+    init_spis();
+    ui->lineEdit_selekcja->clear();
 }
