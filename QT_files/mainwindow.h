@@ -40,6 +40,7 @@ private slots:
     void on_tableWidget_wybrane_ksiazki_cellClicked(int row, int column);
     void on_pushButton_szukaj_clicked();
     void on_pushButton_filtry_clicked();
+    void on_pushButton_D_dodaj_clicked();
 private:
     Ui::MainWindow *ui;
     void init_users();
@@ -47,6 +48,9 @@ private:
     void init_borrowed();
     void init_oddawanie();
     void init_spis();
+    void select_user();
+    void select_admin();
+
   
     
   

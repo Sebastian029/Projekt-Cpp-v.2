@@ -81,11 +81,14 @@ Mysql_connector::Mysql_connector() {
 
 }
 
-void Mysql_connector::add_book(string tytul, string gatunek) {
+void Mysql_connector::add_book(string tytul, string autor, string gatunek,  int liczba_stron, string data_wydania) {
     sql::PreparedStatement* pstmt;
-    pstmt = con->prepareStatement("INSERT INTO Ksiazki(tytul, gatunek) VALUES(?,?)");
+    pstmt = con->prepareStatement("INSERT INTO Ksiazki(tytul, autor, gatunek, data_wydania, liczba_stron, enable) VALUES(?,?,?,?,?,1)");
     pstmt->setString(1, tytul);
-    pstmt->setString(2, gatunek);
+    pstmt->setString(2, autor);
+    pstmt->setString(3, gatunek);
+    pstmt->setString(4, data_wydania);
+    pstmt->setInt(5, liczba_stron);
     pstmt->execute();
 
 }

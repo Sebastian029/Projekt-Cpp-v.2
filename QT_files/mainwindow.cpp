@@ -72,6 +72,12 @@ void MainWindow::init_spis() {
 
 }
 
+void MainWindow::select_user() {
+
+}
+void MainWindow::select_admin() {
+
+}
 
 
 
@@ -86,10 +92,12 @@ MainWindow::MainWindow(QWidget *parent)
     init_books();
     init_borrowed();
     init_spis();
-     
+  
      ui->tableWidget_wypozyczenia->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+     ui->tabWidget->setTabEnabled(0, false);
+     ui->tabWidget->setStyleSheet("QTabBar::tab::disabled{width : 0; height : 0; margin : 0; padding : 0; border: none;}");
     
-     
 
 }
 
@@ -304,4 +312,27 @@ void MainWindow::on_pushButton_szukaj_clicked() {
 void MainWindow::on_pushButton_filtry_clicked() {
     init_spis();
     ui->lineEdit_selekcja->clear();
+}
+
+void MainWindow::on_pushButton_D_dodaj_clicked() {
+    QString tytul = ui->lineEdit_D_tytul->text();
+    QString autor = ui->lineEdit_D_autor->text();
+    QString gatunek = ui->lineEdit_D_gatunek->text();
+    int liczba_stron = ui->spinBox_D_strony->value();
+    QDate data = ui->dateEdit_D_data->date();
+
+    if (tytul.length() == 0) {
+        QMessageBox::error(this, "Blad", "Nie dodano tytulu ksiazki");
+    }
+
+    sq.add_book(tytul.toStdString(), autor.toStdString(), gatunek.toStdString(), liczba_stron, data.toString("dd.MM.yyyy").toStdString());
+    QMessageBox::information(this, "Sukces", "Pomyslnie dodano nowa ksiazke");
+
+    init_books();
+    ui->lineEdit_D_tytul->clear();
+    ui->lineEdit_D_autor->clear();
+    ui->lineEdit_D_gatunek->clear();
+    ui->spinBox_D_strony->clear();
+    ui->dateEdit_D_data->clear();
+
 }
