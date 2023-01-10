@@ -23,13 +23,22 @@ void MainWindow::init_users() {
 
 void MainWindow::init_books() {
     ui->tableWidget_ksiazki->setRowCount(0);
+    ui->tableWidget_ksiazki_2->setRowCount(0);
     vector <Book> books = sq.spis();
     for (int i = 0; i < books.size(); i++) {
         ui->tableWidget_ksiazki->insertRow(ui->tableWidget_ksiazki->rowCount());
         ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books[i].title)));
+        ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books[i].title)));
         ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(books[i].autor)));
         ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(books[i].gatunek)));
         ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(to_string(books[i].liczba_stron))));
+
+        ui->tableWidget_ksiazki_2->insertRow(ui->tableWidget_ksiazki_2->rowCount());
+        ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books[i].title)));
+        ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books[i].title)));
+        ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(books[i].autor)));
+        ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(books[i].gatunek)));
+        ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(to_string(books[i].liczba_stron))));
     }
 }
 
@@ -72,38 +81,6 @@ void MainWindow::init_spis() {
 
 }
 
-void MainWindow::select_user() {
-    //for(int i=0;i<7;i++)
-    //    ui->tabWidget->removeTab(i);
-
-    ui->tabWidget->removeTab(0);
-    ui->tabWidget->removeTab(1);
-    ui->tabWidget->removeTab(2);
-    ui->tabWidget->removeTab(3);
-    ui->tabWidget->removeTab(4);
-    ui->tabWidget->removeTab(5);
-    ui->tabWidget->removeTab(6);
-
-
-    ui->tabWidget->insertTab(7, ui->wypozyczenie, "Wypozyczanie");
-    ui->tabWidget->insertTab(8, ui->oddawanie,  "Oddawanie ksiazek");
-    ui->tabWidget->insertTab(9, ui->ksiazki, "Lista ksiazek");
-    
-
-  
-    
-}
-void MainWindow::select_admin() {
-    for (int i = 0; i < 7; i++)
-        ui->tabWidget->removeTab(i);
-
-   // ui->tabWidget->insertTab(3, ui->uzytkownicy, "Lista użytkowników");
-  //  ui->tabWidget->insertTab(4, ui->wypozyczenia, "Wypozyczenia użytkowników");
-   // ui->tabWidget->insertTab(5, ui->modyfikacja, "Modyfikacja ksiazek");
-   // ui->tabWidget->insertTab(6, ui->dodawanie, "Dodaj ksiazke");
-    
-}
-
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -143,17 +120,25 @@ void MainWindow::on_pushButton_zaloguj_clicked()
         QMessageBox::information(this, "Błąd", "Podano błedne dane");
     if (id >= 0) {
 
-        if (sq.is_admin())
-            select_admin();
-        else
-            select_user();
+        if (sq.is_admin()) {
+            ui->stackedWidget->widget(3)->show();
+            ui->stackedWidget->setCurrentWidget(ui->stackedWidget->widget(3));
+            ui->stackedWidget->widget(2)->hide();
+        }
+        else {
+            ui->stackedWidget->widget(3)->hide();
+            ui->stackedWidget->setCurrentWidget(ui->stackedWidget->widget(2));
+            ui->stackedWidget->widget(2)->show();
+        }
+            
 
 
 
         ui->stackedWidget->widget(0)->hide();
         ui->stackedWidget->widget(1)->hide();
-        ui->stackedWidget->widget(2)->show();
-        ui->stackedWidget->setCurrentWidget(ui->stackedWidget->widget(2));
+        
+        
+        
         ui->label_zalogowano_login->setText(log);
         ui->lineEdit_login->clear();
         ui->lineEdit_haslo->clear();
@@ -180,6 +165,7 @@ void MainWindow::on_pushButton_zarejestruj_clicked()
 {
     ui->stackedWidget->widget(0)->hide();
     ui->stackedWidget->widget(2)->hide();
+    ui->stackedWidget->widget(3)->hide();
     ui->stackedWidget->widget(1)->show();
     ui->stackedWidget->setCurrentWidget(ui->stackedWidget->widget(1));
 }
@@ -223,6 +209,7 @@ void MainWindow::on_pushButton_zaloz_clicked()
         QMessageBox::information(this, "Sukces", "Pomyslnie zalozono konto");
         ui->stackedWidget->widget(2)->hide();
         ui->stackedWidget->widget(1)->hide();
+        ui->stackedWidget->widget(3)->hide();
         ui->stackedWidget->widget(0)->show();
         ui->stackedWidget->setCurrentWidget(ui->stackedWidget->widget(0));
 
@@ -253,6 +240,7 @@ void MainWindow::on_pushButton_pokaz_haslo_released() {
 void MainWindow::on_pushButton_anuluj_clicked() {
     ui->stackedWidget->widget(2)->hide();
     ui->stackedWidget->widget(1)->hide();
+    ui->stackedWidget->widget(3)->hide();
     ui->stackedWidget->widget(0)->show();
     ui->stackedWidget->setCurrentWidget(ui->stackedWidget->widget(0));
 }
@@ -261,9 +249,20 @@ void MainWindow::on_pushButton_wyloguj_clicked()
 {
     ui->stackedWidget->widget(2)->hide();
     ui->stackedWidget->widget(1)->hide();
+    ui->stackedWidget->widget(3)->hide();
     ui->stackedWidget->widget(0)->show();
     ui->stackedWidget->setCurrentWidget(ui->stackedWidget->widget(0));
 }
+
+void MainWindow::on_pushButton_wyloguj_4_clicked()
+{
+    ui->stackedWidget->widget(2)->hide();
+    ui->stackedWidget->widget(1)->hide();
+    ui->stackedWidget->widget(3)->hide();
+    ui->stackedWidget->widget(0)->show();
+    ui->stackedWidget->setCurrentWidget(ui->stackedWidget->widget(0));
+}
+
 
 void MainWindow::on_pushButton_oddawanie_clicked()
 {
@@ -350,6 +349,7 @@ void MainWindow::on_pushButton_filtry_clicked() {
 }
 
 void MainWindow::on_pushButton_D_dodaj_clicked() {
+  
     QString tytul = ui->lineEdit_D_tytul->text();
     QString autor = ui->lineEdit_D_autor->text();
     QString gatunek = ui->lineEdit_D_gatunek->text();

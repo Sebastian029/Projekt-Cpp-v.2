@@ -33,6 +33,7 @@ private slots:
     void on_pushButton_pokaz_haslo_pressed();
     void on_pushButton_pokaz_haslo_released();
     void on_pushButton_wyloguj_clicked();
+    void on_pushButton_wyloguj_4_clicked();
     void on_pushButton_anuluj_clicked();
     void on_pushButton_oddawanie_clicked();
     void on_pushButton_wypozycz_clicked();
