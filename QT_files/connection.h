@@ -23,7 +23,7 @@ public:
     ~Mysql_connector();
     int id;
 
-    void add_book(std::string tytul,std::string autor, std::string gatunek, int liczba_stron, std::string data_wydania);
+    void add_book(std::string tytul,std::string autor, std::string gatunek, int liczba_stron, std::string data_wydania, int delete_date);
     int login(std::string login, std::string haslo);
     vector <Book> spis();
     vector <User> lista_uzytkownikow();
@@ -34,6 +34,7 @@ public:
     vector <Borrowed_books> borrowed_list();
     vector <Book> spis_dostepnych();
     vector <Book> spis_wybranych(string kategoria, string wybor);
+    int is_admin();
 
 };
 

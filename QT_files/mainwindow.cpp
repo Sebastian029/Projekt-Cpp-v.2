@@ -29,7 +29,7 @@ void MainWindow::init_books() {
         ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books[i].title)));
         ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(books[i].autor)));
         ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(books[i].gatunek)));
-        ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 3, new QTableWidgetItem(books[i].liczba_stron));
+        ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(to_string(books[i].liczba_stron))));
     }
 }
 
@@ -73,10 +73,27 @@ void MainWindow::init_spis() {
 }
 
 void MainWindow::select_user() {
-
+    ui->tabWidget->setTabEnabled(0, true);
+    ui->tabWidget->setTabEnabled(1, true);
+    ui->tabWidget->setTabEnabled(2, true);
+    ui->tabWidget->setTabEnabled(3, false);
+    ui->tabWidget->setTabEnabled(4, false);
+    ui->tabWidget->setTabEnabled(5, false);
+    ui->tabWidget->setTabEnabled(6, false);
+    ui->tabWidget->setTabEnabled(7, false);
+  
+    
 }
 void MainWindow::select_admin() {
-
+    ui->tabWidget->setTabEnabled(0, false);
+    ui->tabWidget->setTabEnabled(1, false);
+    ui->tabWidget->setTabEnabled(2, false);
+    ui->tabWidget->setTabEnabled(3, true);
+    ui->tabWidget->setTabEnabled(4, true);
+    ui->tabWidget->setTabEnabled(5, true);
+    ui->tabWidget->setTabEnabled(6, true);
+   
+    
 }
 
 
@@ -86,7 +103,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    
+    ui->tabWidget->setStyleSheet("QTabBar::tab::disabled{max-width : 0; max-height : 0; margin : 0; padding : 0; border: none; }");
+   
 
     init_users();
     init_books();
@@ -94,10 +112,6 @@ MainWindow::MainWindow(QWidget *parent)
     init_spis();
   
      ui->tableWidget_wypozyczenia->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-
-     ui->tabWidget->setTabEnabled(0, false);
-     ui->tabWidget->setStyleSheet("QTabBar::tab::disabled{width : 0; height : 0; margin : 0; padding : 0; border: none;}");
-    
 
 }
 
@@ -120,7 +134,14 @@ void MainWindow::on_pushButton_zaloguj_clicked()
     if (id == -1)
         QMessageBox::information(this, "Błąd", "Podano błedne dane");
     if (id >= 0) {
-        QMessageBox::information(this, "", "Zalogowano pomyslnie");
+
+        if (sq.is_admin())
+            select_admin();
+        else
+            select_user();
+
+
+
         ui->stackedWidget->widget(0)->hide();
         ui->stackedWidget->widget(1)->hide();
         ui->stackedWidget->widget(2)->show();
@@ -239,11 +260,17 @@ void MainWindow::on_pushButton_wyloguj_clicked()
 void MainWindow::on_pushButton_oddawanie_clicked()
 {
     QString book_title = ui->comboBox_oddawanie->currentText();
+    if (book_title.length() == 0) {
+        QMessageBox::information(this, "", "Brak ksiazek do oddania");
+        return;
+    }
+
     sq.return_book(book_title.toStdString());
     QMessageBox::information(this, "Sukces", "Zwrocono ksiazke pt. " + book_title);
     init_borrowed();
     init_oddawanie();
     init_spis();
+    init_users();
 
 }
 
@@ -322,10 +349,14 @@ void MainWindow::on_pushButton_D_dodaj_clicked() {
     QDate data = ui->dateEdit_D_data->date();
 
     if (tytul.length() == 0) {
-        QMessageBox::error(this, "Blad", "Nie dodano tytulu ksiazki");
+        QMessageBox::warning(this, "Blad", "Nie dodano tytulu ksiazki");
+        return;
     }
+    int delete_date = 0;
+    if(ui->checkBox_D_data->isChecked())
+        delete_date =1;
 
-    sq.add_book(tytul.toStdString(), autor.toStdString(), gatunek.toStdString(), liczba_stron, data.toString("dd.MM.yyyy").toStdString());
+    sq.add_book(tytul.toStdString(), autor.toStdString(), gatunek.toStdString(), liczba_stron, data.toString("dd.MM.yyyy").toStdString(), delete_date);
     QMessageBox::information(this, "Sukces", "Pomyslnie dodano nowa ksiazke");
 
     init_books();
@@ -334,5 +365,17 @@ void MainWindow::on_pushButton_D_dodaj_clicked() {
     ui->lineEdit_D_gatunek->clear();
     ui->spinBox_D_strony->clear();
     ui->dateEdit_D_data->clear();
+
+}
+
+void MainWindow::on_checkBox_D_data_clicked() {
+
+    
+    if (ui->checkBox_D_data->isChecked()) {
+        ui->dateEdit_D_data->setEnabled(false);
+    }
+    else {
+        ui->dateEdit_D_data->setEnabled(true);
+    }
 
 }

@@ -41,6 +41,7 @@ private slots:
     void on_pushButton_szukaj_clicked();
     void on_pushButton_filtry_clicked();
     void on_pushButton_D_dodaj_clicked();
+    void on_checkBox_D_data_clicked();
 private:
     Ui::MainWindow *ui;
     void init_users();

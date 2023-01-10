@@ -49,7 +49,7 @@ Mysql_connector::Mysql_connector() {
     stmt->execute("DROP TABLE IF EXISTS Uzytkownicy");
     cout << "Finished dropping table (if existed)" << endl;
 
-    stmt->execute("CREATE TABLE Uzytkownicy (id_uzytkownika INT AUTO_INCREMENT, login VARCHAR(30), haslo VARCHAR(30), email VARCHAR(30), nr_telefonu INTEGER, num_of_borrowed_books INTEGER, admin BIT, PRIMARY KEY(id_uzytkownika));");
+    stmt->execute("CREATE TABLE Uzytkownicy (id_uzytkownika INT AUTO_INCREMENT, login VARCHAR(30), haslo VARCHAR(30), email VARCHAR(30), nr_telefonu INTEGER, num_of_borrowed_books INTEGER, admin INTEGER, PRIMARY KEY(id_uzytkownika));");
     stmt->execute("CREATE TABLE Ksiazki (id_ksiazki INT AUTO_INCREMENT, enable BOOLEAN, tytul VARCHAR(30), autor VARCHAR(30), gatunek VARCHAR(20), data_wydania DATE, liczba_stron INT, PRIMARY KEY(id_ksiazki));");
     stmt->execute("CREATE TABLE Wypozyczenia (id_wypozyczenia INT AUTO_INCREMENT,id_uzytkownika INT, id_ksiazki INT UNIQUE, data_wypozyczenia VARCHAR(20), data_oddania VARCHAR(20), PRIMARY KEY(id_wypozyczenia), FOREIGN KEY (id_uzytkownika) REFERENCES Uzytkownicy(id_uzytkownika), FOREIGN KEY (id_ksiazki) REFERENCES Ksiazki(id_ksiazki));");
 
@@ -60,9 +60,9 @@ Mysql_connector::Mysql_connector() {
 
 
 
-    stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books) VALUES ('qwe', 'asd', 0);");
-    stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books) VALUES ('mycos', 'mypasads', 0);");
-    stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books) VALUES ('LOGIN', 'HASLO', 0);");
+    stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books, admin) VALUES ('qwe', 'asd', 0, 0);");
+    stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books, admin) VALUES ('mycos', 'mypasads', 0, 0);");
+    stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books, admin) VALUES ('LOGIN', 'HASLO', 1, 1);");
 
     stmt->execute("INSERT INTO Ksiazki (tytul,enable) VALUES ('TytulKsiazki',0);");
     stmt->execute("INSERT INTO Ksiazki (tytul,enable) VALUE ('TytulKsiazki1',0);");
@@ -81,15 +81,32 @@ Mysql_connector::Mysql_connector() {
 
 }
 
-void Mysql_connector::add_book(string tytul, string autor, string gatunek,  int liczba_stron, string data_wydania) {
-    sql::PreparedStatement* pstmt;
-    pstmt = con->prepareStatement("INSERT INTO Ksiazki(tytul, autor, gatunek, data_wydania, liczba_stron, enable) VALUES(?,?,?,?,?,1)");
-    pstmt->setString(1, tytul);
-    pstmt->setString(2, autor);
-    pstmt->setString(3, gatunek);
-    pstmt->setString(4, data_wydania);
-    pstmt->setInt(5, liczba_stron);
-    pstmt->execute();
+void Mysql_connector::add_book(string tytul, string autor, string gatunek,  int liczba_stron, string data_wydania, int delete_date) {
+
+    if (liczba_stron > 0) {
+        sql::PreparedStatement* pstmt;
+        pstmt = con->prepareStatement("INSERT INTO Ksiazki(tytul, autor, gatunek, data_wydania, liczba_stron, enable) VALUES(?,?,?,?,?,1)");
+        pstmt->setString(1, tytul);
+        pstmt->setString(2, autor);
+        pstmt->setString(3, gatunek);
+        pstmt->setString(4, data_wydania);
+        if(delete_date)
+             pstmt->setNull(4, 0);
+        pstmt->setInt(5, liczba_stron);
+        pstmt->execute();
+        
+    }
+    else {
+        sql::PreparedStatement* pstmt;
+        pstmt = con->prepareStatement("INSERT INTO Ksiazki(tytul, autor, gatunek, data_wydania, enable) VALUES(?,?,?,?,1)");
+        pstmt->setString(1, tytul);
+        pstmt->setString(2, autor);
+        pstmt->setString(3, gatunek);
+        pstmt->setString(4, data_wydania);
+        if (delete_date)
+            pstmt->setNull(4, 0);
+        pstmt->execute();
+    }
 
 }
 
@@ -118,7 +135,7 @@ int Mysql_connector::login(string login, string haslo) {
 vector <Book>  Mysql_connector::spis() {
 
     vector <Book> books;
-    pstmt = con->prepareStatement("SELECT id_ksiazki, tytul FROM Ksiazki;");
+    pstmt = con->prepareStatement("SELECT id_ksiazki, tytul, autor, data_wydania, gatunek, liczba_stron FROM Ksiazki;");
     result = pstmt->executeQuery();
     while (result->next()) {
         //printf("Reading from table=(%d, %s, %s, %d)\n", result->getInt(1), result->getString(2).c_str(), result->getString(3).c_str(), result->getInt(4));
@@ -128,6 +145,18 @@ vector <Book>  Mysql_connector::spis() {
 
         temp.title = "";
         temp.title = result->getString(2).c_str();
+
+        temp.autor = "";
+        temp.autor = result->getString(3).c_str();
+
+        temp.data_wydania = "";
+        temp.data_wydania = result->getString(4).c_str();
+
+        temp.gatunek = "";
+        temp.gatunek = result->getString(5).c_str();
+
+        temp.liczba_stron = 0;
+        temp.liczba_stron = result->getInt(6);
         books.push_back(temp);
     }
 
@@ -272,6 +301,10 @@ bool Mysql_connector::return_book(string title) {
     pstmt->setInt(1, book_id);
     pstmt->executeQuery();
 
+    pstmt = con->prepareStatement("UPDATE uzytkownicy SET num_of_borrowed_books = num_of_borrowed_books - 1 WHERE id_uzytkownika = ?");
+    pstmt->setInt(1, this->id);
+    pstmt->executeQuery();
+
     return 1;
 }
 
@@ -377,4 +410,15 @@ vector <Book>  Mysql_connector::spis_wybranych(string kategoria, string wybor){
     }
 
     return books;
+}
+
+int Mysql_connector::is_admin() {
+  
+    pstmt = con->prepareStatement("SELECT admin FROM uzytkownicy WHERE id_uzytkownika=?;");
+    pstmt->setInt(1, this->id);
+    result = pstmt->executeQuery();
+    result->next();
+    int admin = result->getInt(1);
+
+    return admin;
 }
