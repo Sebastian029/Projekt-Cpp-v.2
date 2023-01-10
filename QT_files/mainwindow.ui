@@ -30,8 +30,11 @@
         <height>480</height>
        </size>
       </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_3">
        <layout class="QGridLayout" name="gridLayout_6">
@@ -422,6 +425,9 @@
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_6">
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
             <property name="text">
              <string>Login</string>
             </property>
@@ -546,6 +552,9 @@
            <layout class="QGridLayout" name="gridLayout_8">
             <item row="0" column="1">
              <widget class="QPushButton" name="pushButton_pokaz_haslo">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
               <property name="text">
                <string>Pokaz haslo</string>
               </property>
