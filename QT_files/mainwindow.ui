@@ -31,7 +31,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="page_3">
        <layout class="QGridLayout" name="gridLayout_6">
@@ -717,8 +717,23 @@
             <property name="enabled">
              <bool>true</bool>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::WheelFocus</enum>
+            </property>
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="tabPosition">
+             <enum>QTabWidget::North</enum>
+            </property>
+            <property name="tabShape">
+             <enum>QTabWidget::Rounded</enum>
+            </property>
             <property name="currentIndex">
-             <number>3</number>
+             <number>0</number>
+            </property>
+            <property name="tabBarAutoHide">
+             <bool>false</bool>
             </property>
             <widget class="QWidget" name="wypozyczenie">
              <property name="enabled">
@@ -1036,7 +1051,7 @@
             </widget>
             <widget class="QWidget" name="wypozyczenia">
              <attribute name="title">
-              <string>Wypozyczenia</string>
+              <string>Wypozyczenia uzytkonikow</string>
              </attribute>
              <widget class="QTableWidget" name="tableWidget_wypozyczenia">
               <property name="geometry">

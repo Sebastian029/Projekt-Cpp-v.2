@@ -73,26 +73,34 @@ void MainWindow::init_spis() {
 }
 
 void MainWindow::select_user() {
-    ui->tabWidget->setTabEnabled(0, true);
-    ui->tabWidget->setTabEnabled(1, true);
-    ui->tabWidget->setTabEnabled(2, true);
-    ui->tabWidget->setTabEnabled(3, false);
-    ui->tabWidget->setTabEnabled(4, false);
-    ui->tabWidget->setTabEnabled(5, false);
-    ui->tabWidget->setTabEnabled(6, false);
-    ui->tabWidget->setTabEnabled(7, false);
+    //for(int i=0;i<7;i++)
+    //    ui->tabWidget->removeTab(i);
+
+    ui->tabWidget->removeTab(0);
+    ui->tabWidget->removeTab(1);
+    ui->tabWidget->removeTab(2);
+    ui->tabWidget->removeTab(3);
+    ui->tabWidget->removeTab(4);
+    ui->tabWidget->removeTab(5);
+    ui->tabWidget->removeTab(6);
+
+
+    ui->tabWidget->insertTab(7, ui->wypozyczenie, "Wypozyczanie");
+    ui->tabWidget->insertTab(8, ui->oddawanie,  "Oddawanie ksiazek");
+    ui->tabWidget->insertTab(9, ui->ksiazki, "Lista ksiazek");
+    
+
   
     
 }
 void MainWindow::select_admin() {
-    ui->tabWidget->setTabEnabled(0, false);
-    ui->tabWidget->setTabEnabled(1, false);
-    ui->tabWidget->setTabEnabled(2, false);
-    ui->tabWidget->setTabEnabled(3, true);
-    ui->tabWidget->setTabEnabled(4, true);
-    ui->tabWidget->setTabEnabled(5, true);
-    ui->tabWidget->setTabEnabled(6, true);
-   
+    for (int i = 0; i < 7; i++)
+        ui->tabWidget->removeTab(i);
+
+   // ui->tabWidget->insertTab(3, ui->uzytkownicy, "Lista użytkowników");
+  //  ui->tabWidget->insertTab(4, ui->wypozyczenia, "Wypozyczenia użytkowników");
+   // ui->tabWidget->insertTab(5, ui->modyfikacja, "Modyfikacja ksiazek");
+   // ui->tabWidget->insertTab(6, ui->dodawanie, "Dodaj ksiazke");
     
 }
 
