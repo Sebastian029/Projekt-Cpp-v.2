@@ -124,11 +124,13 @@ void MainWindow::on_pushButton_zaloguj_clicked()
             ui->stackedWidget->widget(3)->show();
             ui->stackedWidget->setCurrentWidget(ui->stackedWidget->widget(3));
             ui->stackedWidget->widget(2)->hide();
+            ui->label_zalogowano_login_4->setText(log);
         }
         else {
             ui->stackedWidget->widget(3)->hide();
             ui->stackedWidget->setCurrentWidget(ui->stackedWidget->widget(2));
             ui->stackedWidget->widget(2)->show();
+            ui->label_zalogowano_login->setText(log);
         }
             
 
@@ -138,8 +140,7 @@ void MainWindow::on_pushButton_zaloguj_clicked()
         ui->stackedWidget->widget(1)->hide();
         
         
-        
-        ui->label_zalogowano_login->setText(log);
+       
         ui->lineEdit_login->clear();
         ui->lineEdit_haslo->clear();
         
@@ -354,6 +355,7 @@ void MainWindow::on_pushButton_D_dodaj_clicked() {
     QString autor = ui->lineEdit_D_autor->text();
     QString gatunek = ui->lineEdit_D_gatunek->text();
     int liczba_stron = ui->spinBox_D_strony->value();
+    int num = ui->spinBox_D_ilosc->value();
     QDate data = ui->dateEdit_D_data->date();
 
     if (tytul.length() == 0) {
@@ -363,8 +365,9 @@ void MainWindow::on_pushButton_D_dodaj_clicked() {
     int delete_date = 0;
     if(ui->checkBox_D_data->isChecked())
         delete_date =1;
-
-    sq.add_book(tytul.toStdString(), autor.toStdString(), gatunek.toStdString(), liczba_stron, data.toString("dd.MM.yyyy").toStdString(), delete_date);
+    for (int i = 0; i < num; i++) {
+        sq.add_book(tytul.toStdString(), autor.toStdString(), gatunek.toStdString(), liczba_stron, data.toString("dd.MM.yyyy").toStdString(), delete_date);
+    }
     QMessageBox::information(this, "Sukces", "Pomyslnie dodano nowa ksiazke");
 
     init_books();
@@ -373,6 +376,7 @@ void MainWindow::on_pushButton_D_dodaj_clicked() {
     ui->lineEdit_D_gatunek->clear();
     ui->spinBox_D_strony->clear();
     ui->dateEdit_D_data->clear();
+    ui->spinBox_D_ilosc->clear();
 
 }
 
