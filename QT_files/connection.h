@@ -26,6 +26,7 @@ public:
     void add_book(std::string tytul,std::string autor, std::string gatunek, int liczba_stron, std::string data_wydania, int delete_date);
     int login(std::string login, std::string haslo);
     vector <Book> spis();
+    vector <Book> spis_user();
     vector <User> lista_uzytkownikow();
     int create_account(string login, string password, string email, int nr_tel);
     vector <Book> wypozyczone();
@@ -35,6 +36,10 @@ public:
     vector <Book> spis_dostepnych();
     vector <Book> spis_wybranych(string kategoria, string wybor);
     int is_admin();
+    vector <Daty_wypozyczen> daty_wypozyczen();
+    int przedluz(string title);
+
+    
 
 };
 

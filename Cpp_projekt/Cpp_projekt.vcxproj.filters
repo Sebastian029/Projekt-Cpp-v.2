@@ -55,6 +55,9 @@
     <ClInclude Include="..\QT_files\connection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TODO.h">
+      <Filter>Translation Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\QT_files\books_icon.ico">

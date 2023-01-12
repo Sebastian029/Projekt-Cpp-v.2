@@ -42,7 +42,7 @@ Mysql_connector::Mysql_connector() {
 
     //please create database "quickstartdb" ahead of time
     con->setSchema("quickstartdb");
-
+    /*
     stmt = con->createStatement();
     stmt->execute("DROP TABLE IF EXISTS Wypozyczenia");
     stmt->execute("DROP TABLE IF EXISTS Ksiazki");
@@ -58,7 +58,7 @@ Mysql_connector::Mysql_connector() {
 
 
 
-
+    
 
     stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books, admin) VALUES ('qwe', 'asd', 0, 0);");
     stmt->execute("INSERT INTO Uzytkownicy (login, haslo, num_of_borrowed_books, admin) VALUES ('mycos', 'mypasads', 0, 0);");
@@ -78,7 +78,7 @@ Mysql_connector::Mysql_connector() {
 
     
 
-
+    */
 }
 
 void Mysql_connector::add_book(string tytul, string autor, string gatunek,  int liczba_stron, string data_wydania, int delete_date) {
@@ -260,7 +260,7 @@ int Mysql_connector::borrow_book(string title) {
 
     
     // dodanie do wypozyczen
-    pstmt = con->prepareStatement("INSERT INTO wypozyczenia (id_uzytkownika, id_ksiazki, data_wypozyczenia, data_oddania) VALUES (?, ?, date_format(NOW(), '%d.%m.%Y'), date_format(DATE_ADD(NOW(), INTERVAL 1 MONTH), '%d.%m.%Y'));");
+    pstmt = con->prepareStatement("INSERT INTO wypozyczenia (id_uzytkownika, id_ksiazki, data_wypozyczenia, data_oddania, przedluzenie) VALUES (?, ?, date_format(NOW(), '%d.%m.%Y'), date_format(DATE_ADD(NOW(), INTERVAL 1 MONTH), '%d.%m.%Y'), 0);");
     pstmt->setInt(1, this->id);
     pstmt->setInt(2, book_id);
     pstmt->executeQuery();
@@ -292,7 +292,7 @@ bool Mysql_connector::return_book(string title) {
     }
 
     // zmiana dostepsnosci ksiazki
-    pstmt = con->prepareStatement("UPDATE ksiazki SET enable=1 WHERE id_ksiazki=?;");
+    pstmt = con->prepareStatement("UPDATE ksiazki SET enable=1 WHERE id_ksiazki=? LIMIT 1;");
     pstmt->setInt(1, book_id);
     pstmt->executeQuery();
 
@@ -346,18 +346,32 @@ vector <Borrowed_books> Mysql_connector::borrowed_list()     {
 vector <Book>  Mysql_connector::spis_dostepnych() {
 
     vector <Book> books;
-    pstmt = con->prepareStatement("SELECT id_ksiazki, tytul FROM Ksiazki WHERE enable=1;");
+    pstmt = con->prepareStatement("SELECT DISTINCT tytul, autor, data_wydania, gatunek, liczba_stron FROM Ksiazki WHERE enable =1;");
     result = pstmt->executeQuery();
     while (result->next()) {
         //printf("Reading from table=(%d, %s, %s, %d)\n", result->getInt(1), result->getString(2).c_str(), result->getString(3).c_str(), result->getInt(4));
         Book temp;
-        temp.id = -1;
-        temp.id = result->getInt(1);
-
+     
         temp.title = "";
-        temp.title = result->getString(2).c_str();
+        temp.title = result->getString(1).c_str();
+
+        temp.autor = "";
+        temp.autor = result->getString(2).c_str();
+
+        temp.data_wydania = "";
+        temp.data_wydania = result->getString(3).c_str();
+
+        temp.gatunek = "";
+        temp.gatunek = result->getString(4).c_str();
+
+        temp.liczba_stron = 0;
+        temp.liczba_stron = result->getInt(5);
+        
         books.push_back(temp);
     }
+
+
+
 
     return books;
 
@@ -367,44 +381,39 @@ vector <Book>  Mysql_connector::spis_wybranych(string kategoria, string wybor){
     vector <Book> books;
 
     if (kategoria == "Tytul") {
-        pstmt = con->prepareStatement("SELECT id_ksiazki, tytul FROM Ksiazki WHERE enable = 1 AND tytul=?;");
+        pstmt = con->prepareStatement("SELECT DISTINCT tytul FROM Ksiazki WHERE enable = 1 AND tytul=?;");
         pstmt->setString(1, wybor);
         result = pstmt->executeQuery();
         while (result->next()) {
             Book temp;
-            temp.id = -1;
-            temp.id = result->getInt(1);
-
+          
             temp.title = "";
-            temp.title = result->getString(2).c_str();
+            temp.title = result->getString(1).c_str();
             books.push_back(temp);
         }
     }
     else if (kategoria == "Autor") {
-        pstmt = con->prepareStatement("SELECT id_ksiazki, tytul FROM Ksiazki WHERE enable = 1 AND autor=?;");
+        pstmt = con->prepareStatement("SELECT DISTINCT tytul FROM Ksiazki WHERE enable = 1 AND autor=?;");
         pstmt->setString(1, wybor);
         result = pstmt->executeQuery();
         while (result->next()) {
             Book temp;
-            temp.id = -1;
-            temp.id = result->getInt(1);
+       
 
             temp.title = "";
-            temp.title = result->getString(2).c_str();
+            temp.title = result->getString(1).c_str();
             books.push_back(temp);
         }
     }
     else if (kategoria == "Gatunek") {
-        pstmt = con->prepareStatement("SELECT id_ksiazki, tytul FROM Ksiazki WHERE enable = 1 AND gatunek=?;");
+        pstmt = con->prepareStatement("SELECT DISTINCT tytul FROM Ksiazki WHERE enable = 1 AND gatunek=?;");
         pstmt->setString(1, wybor);
         result = pstmt->executeQuery();
         while (result->next()) {
             Book temp;
-            temp.id = -1;
-            temp.id = result->getInt(1);
-
+  
             temp.title = "";
-            temp.title = result->getString(2).c_str();
+            temp.title = result->getString(1).c_str();
             books.push_back(temp);
         }
     }
@@ -421,4 +430,87 @@ int Mysql_connector::is_admin() {
     int admin = result->getInt(1);
 
     return admin;
+}
+
+vector <Daty_wypozyczen> Mysql_connector::daty_wypozyczen() {
+
+    vector <Daty_wypozyczen> dates;
+    pstmt = con->prepareStatement("SELECT tytul, data_wypozyczenia, data_oddania FROM wypozyczenia, ksiazki, uzytkownicy WHERE wypozyczenia.id_uzytkownika= uzytkownicy.id_uzytkownika AND wypozyczenia.id_ksiazki = ksiazki.id_ksiazki  AND uzytkownicy.id_uzytkownika=?;");
+    pstmt->setInt(1, this->id);
+    result = pstmt->executeQuery();
+    while (result->next()) {
+        Daty_wypozyczen date;
+        
+        date.tytul = result->getString(1).c_str();
+        date.d_wypozyczenia = result->getString(2).c_str();
+        date.d_oddania = result->getString(3).c_str();
+
+        dates.push_back(date);
+    }
+
+    return dates;
+}
+
+
+int Mysql_connector::przedluz(string title) {
+        pstmt = con->prepareStatement("SELECT przedluzenie FROM wypozyczenia, uzytkownicy, ksiazki WHERE wypozyczenia.id_uzytkownika = uzytkownicy.id_uzytkownika AND wypozyczenia.id_ksiazki = ksiazki.id_ksiazki AND ksiazki.tytul = ? AND uzytkownicy.id_uzytkownika = ? LIMIT 1;");
+        pstmt->setString(1, title);
+        pstmt->setInt(2, this->id);
+        result = pstmt->executeQuery();
+        result->next();
+        int enable = result->getInt(1);
+        
+
+        if (enable > 0)
+            return -1;
+
+
+        pstmt = con->prepareStatement("UPDATE wypozyczenia, uzytkownicy, ksiazki SET przedluzenie = 1 WHERE wypozyczenia.id_uzytkownika = uzytkownicy.id_uzytkownika AND wypozyczenia.id_ksiazki= ksiazki.id_ksiazki AND ksiazki.tytul = ? AND uzytkownicy.id_uzytkownika = ? LIMIT 1;");
+        pstmt->setString(1, title);
+        pstmt->setInt(2, this->id);
+        result = pstmt->executeQuery();
+
+        pstmt = con->prepareStatement("UPDATE Wypozyczenia left join ksiazki on wypozyczenia.id_ksiazki = ksiazki.id_ksiazki set data_oddania = date_format(DATE_ADD(date_format(str_to_date(data_oddania, '%d.%m.%Y'), '%Y-%m-%d'), INTERVAL 2 WEEK), '%d.%m.%Y') WHERE ksiazki.tytul = ? AND wypozyczenia.id_uzytkownika = ? LIMIT 1; ");
+        pstmt->setString(1, title);
+        pstmt->setInt(2, this->id);
+        result = pstmt->executeQuery();
+        
+        return 1;
+
+
+}
+
+
+vector <Book> Mysql_connector::spis_user() {
+    vector <Book> books;
+    pstmt = con->prepareStatement("select distinct(tytul), autor, gatunek,data_wydania, liczba_stron, cnt from ksiazki left join(select tytul ty, count(tytul) cnt from ksiazki WHERE enable = 1  group by tytul)AS t on tytul=ty;");
+    result = pstmt->executeQuery();
+    while (result->next()) {
+        //printf("Reading from table=(%d, %s, %s, %d)\n", result->getInt(1), result->getString(2).c_str(), result->getString(3).c_str(), result->getInt(4));
+        Book temp;
+ 
+        temp.title = "";
+        temp.title = result->getString(1).c_str();
+
+        temp.autor = "";
+        temp.autor = result->getString(2).c_str();
+
+        temp.gatunek = "";
+        temp.gatunek = result->getString(3).c_str();
+
+        temp.data_wydania = "";
+        temp.data_wydania = result->getString(4).c_str();
+
+        temp.liczba_stron = 0;
+        temp.liczba_stron = result->getInt(5);
+
+        temp.count = 0;
+        temp.count = result->getInt(6);
+
+        books.push_back(temp);
+    }
+
+    return books;
+
+
 }

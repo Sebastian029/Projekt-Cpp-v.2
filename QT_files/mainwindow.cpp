@@ -22,24 +22,41 @@ void MainWindow::init_users() {
 }
 
 void MainWindow::init_books() {
-    ui->tableWidget_ksiazki->setRowCount(0);
     ui->tableWidget_ksiazki_2->setRowCount(0);
     vector <Book> books = sq.spis();
     for (int i = 0; i < books.size(); i++) {
-        ui->tableWidget_ksiazki->insertRow(ui->tableWidget_ksiazki->rowCount());
-        ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books[i].title)));
-        ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books[i].title)));
-        ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(books[i].autor)));
-        ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(books[i].gatunek)));
-        ui->tableWidget_ksiazki->setItem(ui->tableWidget_ksiazki->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(to_string(books[i].liczba_stron))));
-
+ 
         ui->tableWidget_ksiazki_2->insertRow(ui->tableWidget_ksiazki_2->rowCount());
-        ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books[i].title)));
-        ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books[i].title)));
-        ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(books[i].autor)));
-        ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(books[i].gatunek)));
-        ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(to_string(books[i].liczba_stron))));
+        ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(to_string(books[i].id))));
+        ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(books[i].title)));
+        ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(books[i].autor)));
+        ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(books[i].gatunek)));
+        ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 4, new QTableWidgetItem(QString::fromStdString(to_string(books[i].liczba_stron))));
     }
+
+    
+
+    ui->tableWidget_ksiazki_user->setRowCount(0);
+    ui->tableWidget_ksiazki_3->setRowCount(0);
+    vector <Book> books_user = sq.spis_user();
+    for (int i = 0; i < books_user.size(); i++) {
+
+        ui->tableWidget_ksiazki_user->insertRow(ui->tableWidget_ksiazki_user->rowCount());
+        ui->tableWidget_ksiazki_user->setItem(ui->tableWidget_ksiazki_user->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books_user[i].title)));
+        ui->tableWidget_ksiazki_user->setItem(ui->tableWidget_ksiazki_user->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(books_user[i].autor)));
+        ui->tableWidget_ksiazki_user->setItem(ui->tableWidget_ksiazki_user->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(books_user[i].gatunek)));
+        ui->tableWidget_ksiazki_user->setItem(ui->tableWidget_ksiazki_user->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(to_string(books_user[i].liczba_stron))));
+        ui->tableWidget_ksiazki_user->setItem(ui->tableWidget_ksiazki_user->rowCount() - 1, 4, new QTableWidgetItem(QString::fromStdString(to_string(books_user[i].count))));
+
+
+        ui->tableWidget_ksiazki_3->insertRow(ui->tableWidget_ksiazki_3->rowCount());
+        ui->tableWidget_ksiazki_3->setItem(ui->tableWidget_ksiazki_3->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books_user[i].title)));
+        ui->tableWidget_ksiazki_3->setItem(ui->tableWidget_ksiazki_3->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(books_user[i].autor)));
+        ui->tableWidget_ksiazki_3->setItem(ui->tableWidget_ksiazki_3->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(books_user[i].gatunek)));
+        ui->tableWidget_ksiazki_3->setItem(ui->tableWidget_ksiazki_3->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(to_string(books_user[i].liczba_stron))));
+        ui->tableWidget_ksiazki_3->setItem(ui->tableWidget_ksiazki_3->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(to_string(books_user[i].count))));
+    }
+
 }
 
 void MainWindow::init_borrowed() {
@@ -76,11 +93,40 @@ void MainWindow::init_spis() {
     for (int i = 0; i < books.size(); i++) {
         ui->tableWidget_wypozyczanie->insertRow(ui->tableWidget_wypozyczanie->rowCount());
         ui->tableWidget_wypozyczanie->setItem(ui->tableWidget_wypozyczanie->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books[i].title)));
+        ui->tableWidget_wypozyczanie->setItem(ui->tableWidget_wypozyczanie->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(books[i].autor)));
+        ui->tableWidget_wypozyczanie->setItem(ui->tableWidget_wypozyczanie->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(books[i].gatunek)));
+        ui->tableWidget_wypozyczanie->setItem(ui->tableWidget_wypozyczanie->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(to_string(books[i].liczba_stron))));
+        ui->tableWidget_wypozyczanie->setItem(ui->tableWidget_wypozyczanie->rowCount() - 1, 4, new QTableWidgetItem(QString::fromStdString(books[i].data_wydania)));
+
         
     }
 
 }
 
+void MainWindow::init_daty() {
+    
+    ui->tableWidget_daty->setRowCount(0);
+    vector <Daty_wypozyczen> dates = sq.daty_wypozyczen();
+    for (int i = 0; i < dates.size(); i++) {
+        ui->tableWidget_daty->insertRow(ui->tableWidget_daty->rowCount());
+        ui->tableWidget_daty->setItem(ui->tableWidget_daty->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(dates[i].tytul)));
+        ui->tableWidget_daty->setItem(ui->tableWidget_daty->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(dates[i].d_wypozyczenia)));
+        ui->tableWidget_daty->setItem(ui->tableWidget_daty->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(dates[i].d_oddania)));
+
+        QTextCharFormat tmp;
+        tmp.setBackground(QColor(235, 215, 145));
+
+        QString st = QString::fromStdString(dates[i].d_oddania);
+        QDate calendar_date = QDate::fromString(st, "dd.MM.yyyy");
+         ui->calendarWidget->setDateTextFormat(calendar_date, tmp);
+        
+      
+    }
+
+    
+   
+
+}
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -97,6 +143,10 @@ MainWindow::MainWindow(QWidget *parent)
     init_spis();
   
      ui->tableWidget_wypozyczenia->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+
+    
+
 
 }
 
@@ -148,12 +198,11 @@ void MainWindow::on_pushButton_zaloguj_clicked()
         init_books();
         init_borrowed();
         init_oddawanie();
+        init_daty();
        
 
         
-        QTextCharFormat tmp;
-        tmp.setBackground(QColor(235, 215, 145,100));
-        ui->calendarWidget->setDateTextFormat(QDate(2023,1,3),tmp);
+        
         
         
 
@@ -279,6 +328,7 @@ void MainWindow::on_pushButton_oddawanie_clicked()
     init_oddawanie();
     init_spis();
     init_users();
+    init_daty();
 
 }
 
@@ -321,6 +371,8 @@ void MainWindow::on_pushButton_wypozycz_clicked()
     init_spis();
     init_oddawanie();
     init_borrowed();
+    init_daty();
+    init_books();
 
     
 
@@ -338,6 +390,10 @@ void MainWindow::on_pushButton_szukaj_clicked() {
     for (int i = 0; i < books.size(); i++) {
         ui->tableWidget_wypozyczanie->insertRow(ui->tableWidget_wypozyczanie->rowCount());
         ui->tableWidget_wypozyczanie->setItem(ui->tableWidget_wypozyczanie->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(books[i].title)));
+        ui->tableWidget_wypozyczanie->setItem(ui->tableWidget_wypozyczanie->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(books[i].autor)));
+        ui->tableWidget_wypozyczanie->setItem(ui->tableWidget_wypozyczanie->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(books[i].gatunek)));
+        ui->tableWidget_wypozyczanie->setItem(ui->tableWidget_wypozyczanie->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(to_string(books[i].liczba_stron))));
+        ui->tableWidget_wypozyczanie->setItem(ui->tableWidget_wypozyczanie->rowCount() - 1, 4, new QTableWidgetItem(QString::fromStdString(books[i].data_wydania)));
 
     }
     
@@ -390,4 +446,21 @@ void MainWindow::on_checkBox_D_data_clicked() {
         ui->dateEdit_D_data->setEnabled(true);
     }
 
+}
+
+void MainWindow::on_pushButton_przedluz_clicked() {
+
+    QString book_title = ui->comboBox_oddawanie->currentText();
+    if (book_title.length() == 0) {
+        QMessageBox::information(this, "", "Brak ksiazek do przedluzenia");
+        return;
+    }
+    int done = sq.przedluz(book_title.toStdString());
+
+    if(done==-1)
+        QMessageBox::information(this, "Blad", "Przedluzenie tej ksiazki mozliwe jest tylko jeden raz.");
+    if(done==1)
+        QMessageBox::information(this, "Sukces", "Przedluzono wypozyczenie o 2 tygodnie");
+
+    init_daty();
 }

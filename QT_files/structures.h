@@ -13,6 +13,7 @@ public:
     string data_wydania;
     string gatunek;
     int liczba_stron;
+    int count;
 };
 
 class User {
@@ -31,6 +32,15 @@ public:
     string tytul;
     string data_wypozyczenia;
     string data_oddania;
+
+};
+
+class Daty_wypozyczen {
+public:
+    string tytul;
+    string d_wypozyczenia;
+    string d_oddania;
+
 };
 
 
