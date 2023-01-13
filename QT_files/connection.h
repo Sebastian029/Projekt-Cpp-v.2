@@ -38,6 +38,7 @@ public:
     int is_admin();
     vector <Daty_wypozyczen> daty_wypozyczen();
     int przedluz(string title);
+    void modify_books(vector <Book> books);
 
     
 

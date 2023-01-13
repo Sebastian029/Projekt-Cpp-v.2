@@ -83,30 +83,33 @@ Mysql_connector::Mysql_connector() {
 
 void Mysql_connector::add_book(string tytul, string autor, string gatunek,  int liczba_stron, string data_wydania, int delete_date) {
 
-    if (liczba_stron > 0) {
-        sql::PreparedStatement* pstmt;
-        pstmt = con->prepareStatement("INSERT INTO Ksiazki(tytul, autor, gatunek, data_wydania, liczba_stron, enable) VALUES(?,?,?,?,?,1)");
-        pstmt->setString(1, tytul);
-        pstmt->setString(2, autor);
-        pstmt->setString(3, gatunek);
-        pstmt->setString(4, data_wydania);
-        if(delete_date)
-             pstmt->setNull(4, 0);
-        pstmt->setInt(5, liczba_stron);
-        pstmt->execute();
-        
+    try {
+        if (liczba_stron > 0) {
+            sql::PreparedStatement* pstmt;
+            pstmt = con->prepareStatement("INSERT INTO Ksiazki(tytul, autor, gatunek, data_wydania, liczba_stron, enable) VALUES(?,?,?,?,?,1)");
+            pstmt->setString(1, tytul);
+            pstmt->setString(2, autor);
+            pstmt->setString(3, gatunek);
+            pstmt->setString(4, data_wydania);
+            if (delete_date)
+                pstmt->setNull(4, 0);
+            pstmt->setInt(5, liczba_stron);
+            pstmt->execute();
+
+        }
+        else {
+            sql::PreparedStatement* pstmt;
+            pstmt = con->prepareStatement("INSERT INTO Ksiazki(tytul, autor, gatunek, data_wydania, enable) VALUES(?,?,?,?,1)");
+            pstmt->setString(1, tytul);
+            pstmt->setString(2, autor);
+            pstmt->setString(3, gatunek);
+            pstmt->setString(4, data_wydania);
+            if (delete_date)
+                pstmt->setNull(4, 0);
+            pstmt->execute();
+        }
     }
-    else {
-        sql::PreparedStatement* pstmt;
-        pstmt = con->prepareStatement("INSERT INTO Ksiazki(tytul, autor, gatunek, data_wydania, enable) VALUES(?,?,?,?,1)");
-        pstmt->setString(1, tytul);
-        pstmt->setString(2, autor);
-        pstmt->setString(3, gatunek);
-        pstmt->setString(4, data_wydania);
-        if (delete_date)
-            pstmt->setNull(4, 0);
-        pstmt->execute();
-    }
+    catch (...) {}
 
 }
 
@@ -513,4 +516,32 @@ vector <Book> Mysql_connector::spis_user() {
     return books;
 
 
+}
+
+void Mysql_connector::modify_books(vector <Book> books) {
+    
+    for (int i = 0; i < books.size(); i++) {
+        try {
+            if (books[i].data_wydania.length() == 0) {
+                pstmt = con->prepareStatement("UPDATE ksiazki SET tytul=?, autor=?,gatunek=?, liczba_stron=? WHERE id_ksiazki = ?;");
+                pstmt->setString(1, books[i].title);
+                pstmt->setString(2, books[i].autor);
+                pstmt->setString(3, books[i].gatunek);
+                pstmt->setInt(4, books[i].liczba_stron);
+                pstmt->setInt(5, books[i].id);
+                result = pstmt->executeQuery();
+            }
+            else {
+                pstmt = con->prepareStatement("UPDATE ksiazki SET tytul=?, autor=?,gatunek=?, data_wydania=?, liczba_stron=? WHERE id_ksiazki = ?;");
+                pstmt->setString(1, books[i].title);
+                pstmt->setString(2, books[i].autor);
+                pstmt->setString(3, books[i].gatunek);
+                pstmt->setString(4, books[i].data_wydania);
+                pstmt->setInt(5, books[i].liczba_stron);
+                pstmt->setInt(6, books[i].id);
+                result = pstmt->executeQuery();
+            }
+        }
+        catch (...) {}
+    }
 }

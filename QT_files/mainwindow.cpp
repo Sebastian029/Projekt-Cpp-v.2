@@ -23,6 +23,7 @@ void MainWindow::init_users() {
 
 void MainWindow::init_books() {
     ui->tableWidget_ksiazki_2->setRowCount(0);
+    ui->tableWidget_modyfikacja->setRowCount(0);
     vector <Book> books = sq.spis();
     for (int i = 0; i < books.size(); i++) {
  
@@ -32,6 +33,15 @@ void MainWindow::init_books() {
         ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(books[i].autor)));
         ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(books[i].gatunek)));
         ui->tableWidget_ksiazki_2->setItem(ui->tableWidget_ksiazki_2->rowCount() - 1, 4, new QTableWidgetItem(QString::fromStdString(to_string(books[i].liczba_stron))));
+
+
+        ui->tableWidget_modyfikacja->insertRow(ui->tableWidget_modyfikacja->rowCount());
+        ui->tableWidget_modyfikacja->setItem(ui->tableWidget_modyfikacja->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(to_string(books[i].id))));
+        ui->tableWidget_modyfikacja->setItem(ui->tableWidget_modyfikacja->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(books[i].title)));
+        ui->tableWidget_modyfikacja->setItem(ui->tableWidget_modyfikacja->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(books[i].autor)));
+        ui->tableWidget_modyfikacja->setItem(ui->tableWidget_modyfikacja->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(books[i].gatunek)));
+        ui->tableWidget_modyfikacja->setItem(ui->tableWidget_modyfikacja->rowCount() - 1, 4, new QTableWidgetItem(QString::fromStdString(to_string(books[i].liczba_stron))));
+        ui->tableWidget_modyfikacja->setItem(ui->tableWidget_modyfikacja->rowCount() - 1, 5, new QTableWidgetItem(QString::fromStdString(books[i].data_wydania)));
     }
 
     
@@ -463,4 +473,28 @@ void MainWindow::on_pushButton_przedluz_clicked() {
         QMessageBox::information(this, "Sukces", "Przedluzono wypozyczenie o 2 tygodnie");
 
     init_daty();
+}
+
+void MainWindow::on_pushButton_modyfikuj_clicked() {
+
+    vector <Book> books;
+    
+    for (int i = 0; i < ui->tableWidget_modyfikacja->rowCount(); i++) {
+        Book book;
+       
+        book.id = stoi(ui->tableWidget_modyfikacja->item(i, 0)->text().toStdString());
+        book.title =  ui->tableWidget_modyfikacja->item(i, 1)->text().toStdString();
+        book.autor =  ui->tableWidget_modyfikacja->item(i, 2)->text().toStdString();
+        book.gatunek =  ui->tableWidget_modyfikacja->item(i, 3)->text().toStdString();
+        book.liczba_stron = stoi(ui->tableWidget_modyfikacja->item(i, 4)->text().toStdString());
+        book.data_wydania =  ui->tableWidget_modyfikacja->item(i, 5)->text().toStdString();
+
+        books.push_back(book);
+    }
+    
+    sq.modify_books(books);
+}
+
+void MainWindow::on_pushButton_usun_zmiany_clicked() {
+    init_books(); 
 }
