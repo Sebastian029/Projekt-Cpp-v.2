@@ -415,6 +415,8 @@ void MainWindow::on_pushButton_szukaj_clicked() {
 void MainWindow::on_pushButton_filtry_clicked() {
     init_spis();
     ui->lineEdit_selekcja->clear();
+    ui->comboBox_gatunki->setEnabled(0);
+    ui->lineEdit_selekcja->setEnabled(1);
 }
 
 void MainWindow::on_pushButton_D_dodaj_clicked() {
@@ -425,14 +427,18 @@ void MainWindow::on_pushButton_D_dodaj_clicked() {
     int liczba_stron = ui->spinBox_D_strony->value();
     int num = ui->spinBox_D_ilosc->value();
     QDate data = ui->dateEdit_D_data->date();
-
+    
     if (tytul.length() == 0) {
         QMessageBox::warning(this, "Blad", "Nie dodano tytulu ksiazki");
         return;
     }
+    
     int delete_date = 0;
     if(ui->checkBox_D_data->isChecked())
         delete_date =1;
+    else {
+        delete_date = 0;
+    }
     for (int i = 0; i < num; i++) {
         sq.add_book(tytul.toStdString(), autor.toStdString(), gatunek.toStdString(), liczba_stron, data.toString("dd.MM.yyyy").toStdString(), delete_date);
     }

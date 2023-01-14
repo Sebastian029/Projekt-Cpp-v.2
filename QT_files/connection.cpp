@@ -410,7 +410,7 @@ vector <Book>  Mysql_connector::spis_wybranych(string kategoria, string wybor){
         }
     }
     else if (kategoria == "Autor") {
-        pstmt = con->prepareStatement("SELECT DISTINCT tytul FROM Ksiazki WHERE enable = 1 AND autor=?;");
+        pstmt = con->prepareStatement("SELECT DISTINCT tytul, autor, gatunek, liczba_stron, data_wydania FROM Ksiazki WHERE enable = 1 AND autor=?;");
         pstmt->setString(1, wybor);
         result = pstmt->executeQuery();
         while (result->next()) {
@@ -419,11 +419,25 @@ vector <Book>  Mysql_connector::spis_wybranych(string kategoria, string wybor){
 
             temp.title = "";
             temp.title = result->getString(1).c_str();
+
+            temp.autor = "";
+            temp.autor = result->getString(2).c_str();
+
+            temp.gatunek = "";
+            temp.gatunek = result->getString(3).c_str();
+
+            temp.liczba_stron = 0;
+            temp.liczba_stron = result->getInt(4);
+
+
+            temp.data_wydania = "";
+            temp.data_wydania = result->getString(5).c_str();
+
             books.push_back(temp);
         }
     }
     else if (kategoria == "Gatunek") {
-        pstmt = con->prepareStatement("SELECT DISTINCT tytul FROM Ksiazki WHERE enable = 1 AND gatunek=?;");
+        pstmt = con->prepareStatement("SELECT DISTINCT tytul, autor, gatunek, liczba_stron, data_wydania FROM Ksiazki WHERE enable = 1 AND gatunek=?;");
         pstmt->setString(1, wybor);
         result = pstmt->executeQuery();
         while (result->next()) {
@@ -431,6 +445,20 @@ vector <Book>  Mysql_connector::spis_wybranych(string kategoria, string wybor){
   
             temp.title = "";
             temp.title = result->getString(1).c_str();
+
+            temp.autor = "";
+            temp.autor = result->getString(2).c_str();
+
+            temp.gatunek = "";
+            temp.gatunek = result->getString(3).c_str();
+
+            temp.liczba_stron = 0;
+            temp.liczba_stron = result->getInt(4);
+
+
+            temp.data_wydania = "";
+            temp.data_wydania = result->getString(5).c_str();
+
             books.push_back(temp);
         }
     }

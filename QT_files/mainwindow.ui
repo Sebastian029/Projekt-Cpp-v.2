@@ -739,7 +739,7 @@
              <enum>QTabWidget::Rounded</enum>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>0</number>
             </property>
             <property name="tabBarAutoHide">
              <bool>false</bool>
@@ -1024,7 +1024,7 @@
               </column>
               <column>
                <property name="text">
-                <string>Data wypozyczenia</string>
+                <string>Wypozyczenie</string>
                </property>
               </column>
               <column>
@@ -1159,7 +1159,7 @@
            <enum>QTabWidget::Rounded</enum>
           </property>
           <property name="currentIndex">
-           <number>5</number>
+           <number>0</number>
           </property>
           <property name="tabBarAutoHide">
            <bool>false</bool>
@@ -1424,20 +1424,13 @@
             <property name="geometry">
              <rect>
               <x>0</x>
-              <y>447</y>
+              <y>443</y>
               <width>911</width>
-              <height>41</height>
+              <height>51</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_18">
-             <item row="0" column="1">
-              <widget class="QPushButton" name="pushButton_del_id">
-               <property name="text">
-                <string>Usun ksiazke o danym id</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="5">
+             <item row="1" column="5">
               <spacer name="horizontalSpacer_27">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
@@ -1450,36 +1443,7 @@
                </property>
               </spacer>
              </item>
-             <item row="0" column="4">
-              <spacer name="horizontalSpacer_23">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item row="0" column="0">
-              <widget class="QSpinBox" name="spinBox_del_id"/>
-             </item>
-             <item row="0" column="2">
-              <spacer name="horizontalSpacer_26">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item row="0" column="3">
+             <item row="1" column="3">
               <spacer name="horizontalSpacer_25">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
@@ -1492,19 +1456,68 @@
                </property>
               </spacer>
              </item>
-             <item row="0" column="6">
+             <item row="1" column="1">
+              <widget class="QPushButton" name="pushButton_del_id">
+               <property name="text">
+                <string>Usun ksiazke o danym id</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QSpinBox" name="spinBox_del_id"/>
+             </item>
+             <item row="0" column="0">
+              <spacer name="horizontalSpacer_29">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="2">
+              <spacer name="horizontalSpacer_26">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="6">
               <widget class="QPushButton" name="pushButton_usun_zmiany">
                <property name="text">
                 <string>Usun zmiany</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="7">
+             <item row="1" column="7">
               <widget class="QPushButton" name="pushButton_modyfikuj">
                <property name="text">
                 <string>Modyfikuj</string>
                </property>
               </widget>
+             </item>
+             <item row="1" column="4">
+              <spacer name="horizontalSpacer_23">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
              </item>
             </layout>
            </widget>
