@@ -384,7 +384,7 @@ vector <Book>  Mysql_connector::spis_wybranych(string kategoria, string wybor){
     vector <Book> books;
 
     if (kategoria == "Tytul") {
-        pstmt = con->prepareStatement("SELECT DISTINCT tytul FROM Ksiazki WHERE enable = 1 AND tytul=?;");
+        pstmt = con->prepareStatement("SELECT DISTINCT tytul, autor, gatunek, liczba_stron, data_wydania FROM Ksiazki WHERE enable = 1 AND tytul=?;");
         pstmt->setString(1, wybor);
         result = pstmt->executeQuery();
         while (result->next()) {
@@ -392,6 +392,20 @@ vector <Book>  Mysql_connector::spis_wybranych(string kategoria, string wybor){
           
             temp.title = "";
             temp.title = result->getString(1).c_str();
+
+            temp.autor = "";
+            temp.autor = result->getString(2).c_str();
+
+            temp.gatunek = "";
+            temp.gatunek = result->getString(3).c_str();
+
+            temp.liczba_stron = 0;
+            temp.liczba_stron = result->getInt(4);
+
+
+            temp.data_wydania = "";
+            temp.data_wydania = result->getString(5).c_str();
+
             books.push_back(temp);
         }
     }
@@ -544,4 +558,31 @@ void Mysql_connector::modify_books(vector <Book> books) {
         }
         catch (...) {}
     }
+}
+
+void Mysql_connector::delete_book(int id){
+
+    try {
+        pstmt = con->prepareStatement("DELETE FROM wypozyczenia WHERE id_ksiazki = ?;");
+        pstmt->setInt(1, id);
+        pstmt->executeQuery();
+
+        pstmt = con->prepareStatement("DELETE FROM ksiazki WHERE id_ksiazki = ?;");
+        pstmt->setInt(1, id);
+        pstmt->executeQuery();
+    }
+    catch (...) {}
+}
+
+vector <string> Mysql_connector::get_gatunki() {
+
+    vector <string> gatunki;
+    pstmt = con->prepareStatement("SELECT DISTINCT(gatunek) FROM ksiazki WHERE length(gatunek)>0;");
+    result = pstmt->executeQuery();
+    while (result->next()) {
+        string tmp = result->getString(1).c_str();
+        gatunki.push_back(tmp);
+    }
+
+    return gatunki;
 }

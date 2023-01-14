@@ -46,6 +46,8 @@ private slots:
     void on_pushButton_przedluz_clicked();
     void on_pushButton_modyfikuj_clicked();
     void on_pushButton_usun_zmiany_clicked();
+    void on_pushButton_del_id_clicked();
+    void sig(const QString& txt);
 private:
     Ui::MainWindow *ui;
     void init_users();
@@ -56,6 +58,8 @@ private:
     void select_user();
     void select_admin();
     void init_daty();
+   
+
 
   
     

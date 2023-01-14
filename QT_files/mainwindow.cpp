@@ -144,7 +144,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->tabWidget->setStyleSheet("QTabBar::tab::disabled{max-width : 0; max-height : 0; margin : 0; padding : 0; border: none; }");
    
 
     init_users();
@@ -153,10 +152,10 @@ MainWindow::MainWindow(QWidget *parent)
     init_spis();
   
      ui->tableWidget_wypozyczenia->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+     ui->comboBox_gatunki->setEnabled(0);
 
 
-    
-
+     connect(ui->comboBox_selekcja, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(sig(const QString&)));
 
 }
 
@@ -394,6 +393,9 @@ void MainWindow::on_pushButton_szukaj_clicked() {
     QString kategoria = ui->comboBox_selekcja->currentText();
     QString wybor = ui->lineEdit_selekcja->text();
 
+    if (!ui->lineEdit_selekcja->isEnabled()) {
+        wybor = ui->comboBox_gatunki->currentText();
+    }
   
     ui->tableWidget_wypozyczanie->setRowCount(0);
     vector <Book> books = sq.spis_wybranych(kategoria.toStdString(), wybor.toStdString());
@@ -497,4 +499,31 @@ void MainWindow::on_pushButton_modyfikuj_clicked() {
 
 void MainWindow::on_pushButton_usun_zmiany_clicked() {
     init_books(); 
+}
+
+void MainWindow::on_pushButton_del_id_clicked() {
+    int id = ui->spinBox_del_id->value();
+    sq.delete_book(id);
+    init_books();
+
+}
+
+void MainWindow::sig(const QString&){
+    vector <string> gatunki = sq.get_gatunki();
+    
+    QString wybor = ui->comboBox_selekcja->currentText();
+
+    if (wybor.toStdString() != "Gatunek") {
+        ui->comboBox_gatunki->setEnabled(0);
+        ui->lineEdit_selekcja->setEnabled(1);
+        return;
+     }
+    ui->comboBox_gatunki->setEnabled(1);
+    ui->lineEdit_selekcja->setEnabled(0);
+
+    if (ui->comboBox_gatunki->count() == 0) {
+        for (int i = 0; i < gatunki.size(); i++)
+            ui->comboBox_gatunki->addItem(QString::fromStdString(gatunki[i]));
+    }
+
 }
