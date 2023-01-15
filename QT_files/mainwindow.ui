@@ -1159,7 +1159,7 @@
            <enum>QTabWidget::Rounded</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>4</number>
           </property>
           <property name="tabBarAutoHide">
            <bool>false</bool>
@@ -1474,7 +1474,11 @@
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QSpinBox" name="spinBox_del_id"/>
+              <widget class="QSpinBox" name="spinBox_del_id">
+               <property name="maximum">
+                <number>10000</number>
+               </property>
+              </widget>
              </item>
              <item row="0" column="0">
               <spacer name="horizontalSpacer_29">

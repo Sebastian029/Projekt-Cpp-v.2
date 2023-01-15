@@ -66,7 +66,7 @@ void MainWindow::init_books() {
         ui->tableWidget_ksiazki_3->setItem(ui->tableWidget_ksiazki_3->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(books_user[i].autor)));
         ui->tableWidget_ksiazki_3->setItem(ui->tableWidget_ksiazki_3->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(books_user[i].gatunek)));
         ui->tableWidget_ksiazki_3->setItem(ui->tableWidget_ksiazki_3->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(to_string(books_user[i].liczba_stron))));
-        ui->tableWidget_ksiazki_3->setItem(ui->tableWidget_ksiazki_3->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(to_string(books_user[i].count))));
+        ui->tableWidget_ksiazki_3->setItem(ui->tableWidget_ksiazki_3->rowCount() - 1, 4, new QTableWidgetItem(QString::fromStdString(to_string(books_user[i].count))));
     }
 
 }
