@@ -259,13 +259,11 @@ void MainWindow::on_pushButton_zaloz_clicked()
         return;
     }
 
-    try {
-        stoll(nr_tel.toStdString());
-        }
-        catch (...) {
-            QMessageBox::information(this, "Blad", "Bledny numer telefonu");
-            return;
+    if (!nr_tel.toInt()) {
+        QMessageBox::information(this, "Blad", "Bledny numer telefonu");
+        return;
     }
+
 
     if (nr_tel.length() < 9) {
         QMessageBox::information(this, "Blad", "Zbyt krotki nr telefonu");
