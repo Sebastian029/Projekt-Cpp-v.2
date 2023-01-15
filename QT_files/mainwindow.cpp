@@ -148,6 +148,7 @@ void MainWindow::init_spoznione() {
         ui->tableWidget_spoznione->setItem(ui->tableWidget_spoznione->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(op[i].login)));
         ui->tableWidget_spoznione->setItem(ui->tableWidget_spoznione->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(op[i].tytul)));
         ui->tableWidget_spoznione->setItem(ui->tableWidget_spoznione->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(op[i].data_oddania)));
+        ui->tableWidget_spoznione->setItem(ui->tableWidget_spoznione->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(to_string(op[i].dni))));
 
     }
 

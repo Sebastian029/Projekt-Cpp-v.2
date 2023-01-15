@@ -50,6 +50,7 @@ public:
     string login;
     string tytul;
     string data_oddania;
+    int dni;
 };
 
 

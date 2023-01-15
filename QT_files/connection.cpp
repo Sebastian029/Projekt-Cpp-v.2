@@ -625,7 +625,7 @@ vector <string> Mysql_connector::get_gatunki() {
 vector <Opoznione> Mysql_connector::spoznienie() {
 
     vector <Opoznione> op;
-    pstmt = con->prepareStatement("SELECT login, tytul, data_oddania FROM uzytkownicy, wypozyczenia, ksiazki WHERE uzytkownicy.id_uzytkownika=wypozyczenia.id_uzytkownika AND ksiazki.id_ksiazki = wypozyczenia.id_ksiazki AND str_to_date(data_oddania, '%d.%m.%Y')<curdate();");
+    pstmt = con->prepareStatement("SELECT login, tytul, data_oddania, datediff(curdate(), str_to_date(data_oddania, '%d.%m.%Y')) FROM uzytkownicy, wypozyczenia, ksiazki WHERE uzytkownicy.id_uzytkownika=wypozyczenia.id_uzytkownika AND ksiazki.id_ksiazki = wypozyczenia.id_ksiazki AND str_to_date(data_oddania, '%d.%m.%Y')<curdate();");
     result = pstmt->executeQuery();
     while (result->next()) {
         Opoznione temp;
@@ -638,6 +638,9 @@ vector <Opoznione> Mysql_connector::spoznienie() {
 
         temp.data_oddania = "";
         temp.data_oddania = result->getString(3).c_str();
+
+        temp.dni = 0;
+        temp.dni = result->getInt(4);
 
         op.push_back(temp);
     }
