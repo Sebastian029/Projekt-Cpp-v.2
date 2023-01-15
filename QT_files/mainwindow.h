@@ -48,6 +48,7 @@ private slots:
     void on_pushButton_usun_zmiany_clicked();
     void on_pushButton_del_id_clicked();
     void sig(const QString& txt);
+    void init_spoznione();
 private:
     Ui::MainWindow *ui;
     void init_users();

@@ -169,7 +169,7 @@ vector <Book>  Mysql_connector::spis() {
 vector <User>  Mysql_connector::lista_uzytkownikow() {
 
     vector<User> users;
-    pstmt = con->prepareStatement("SELECT id_uzytkownika, login, num_of_borrowed_books FROM Uzytkownicy;");
+    pstmt = con->prepareStatement("SELECT id_uzytkownika, login, num_of_borrowed_books, nr_telefonu, email FROM Uzytkownicy;");
     result = pstmt->executeQuery();
     while (result->next()) {
         //printf("Reading from table=(%d, %s, %s, %d)\n", result->getInt(1), result->getString(2).c_str(), result->getString(3).c_str(), result->getInt(4));
@@ -182,6 +182,13 @@ vector <User>  Mysql_connector::lista_uzytkownikow() {
         
         temp.num_of_borrowed_books = -1;
         temp.num_of_borrowed_books = result->getInt(3);
+
+        temp.nr_telefonu = -1;
+        temp.nr_telefonu = result->getInt(4);
+
+
+        temp.email = "";
+        temp.email = result->getString(5).c_str();
 
         users.push_back(temp);
     }
@@ -613,4 +620,29 @@ vector <string> Mysql_connector::get_gatunki() {
     }
 
     return gatunki;
+}
+
+vector <Opoznione> Mysql_connector::spoznienie() {
+
+    vector <Opoznione> op;
+    pstmt = con->prepareStatement("SELECT login, tytul, data_oddania FROM uzytkownicy, wypozyczenia, ksiazki WHERE uzytkownicy.id_uzytkownika=wypozyczenia.id_uzytkownika AND ksiazki.id_ksiazki = wypozyczenia.id_ksiazki AND str_to_date(data_oddania, '%d.%m.%Y')<curdate();");
+    result = pstmt->executeQuery();
+    while (result->next()) {
+        Opoznione temp;
+
+        temp.login = "";
+        temp.login = result->getString(1).c_str();
+
+        temp.tytul = "";
+        temp.tytul = result->getString(2).c_str();
+
+        temp.data_oddania = "";
+        temp.data_oddania = result->getString(3).c_str();
+
+        op.push_back(temp);
+    }
+
+
+
+    return op;
 }

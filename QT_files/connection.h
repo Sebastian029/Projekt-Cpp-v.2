@@ -41,6 +41,7 @@ public:
     void modify_books(vector <Book> books);
     void delete_book(int id);
     vector <string> get_gatunki();
+    vector <Opoznione> spoznienie();
 
     
 

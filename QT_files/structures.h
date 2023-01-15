@@ -21,6 +21,8 @@ public:
     int id;
     string login;
     int num_of_borrowed_books;
+    int nr_telefonu;
+    string email;
 
 };
 
@@ -41,6 +43,13 @@ public:
     string d_wypozyczenia;
     string d_oddania;
 
+};
+
+class Opoznione {
+public:
+    string login;
+    string tytul;
+    string data_oddania;
 };
 
 

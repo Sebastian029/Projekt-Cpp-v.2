@@ -16,6 +16,8 @@ void MainWindow::init_users() {
         ui->tableWidget_uzytkownicy->setItem(ui->tableWidget_uzytkownicy->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(to_string(users[i].id))));
         ui->tableWidget_uzytkownicy->setItem(ui->tableWidget_uzytkownicy->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(users[i].login)));
         ui->tableWidget_uzytkownicy->setItem(ui->tableWidget_uzytkownicy->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(to_string(users[i].num_of_borrowed_books))));
+        ui->tableWidget_uzytkownicy->setItem(ui->tableWidget_uzytkownicy->rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(to_string(users[i].nr_telefonu))));
+        ui->tableWidget_uzytkownicy->setItem(ui->tableWidget_uzytkownicy->rowCount() - 1, 4, new QTableWidgetItem(QString::fromStdString(users[i].email)));
 
     }
  
@@ -138,6 +140,18 @@ void MainWindow::init_daty() {
 
 }
 
+void MainWindow::init_spoznione() {
+    ui->tableWidget_spoznione->setRowCount(0);
+    vector <Opoznione> op = sq.spoznienie();
+    for (int i = 0; i < op.size(); i++) {
+        ui->tableWidget_spoznione->insertRow(ui->tableWidget_spoznione->rowCount());
+        ui->tableWidget_spoznione->setItem(ui->tableWidget_spoznione->rowCount() - 1, 0, new QTableWidgetItem(QString::fromStdString(op[i].login)));
+        ui->tableWidget_spoznione->setItem(ui->tableWidget_spoznione->rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(op[i].tytul)));
+        ui->tableWidget_spoznione->setItem(ui->tableWidget_spoznione->rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(op[i].data_oddania)));
+
+    }
+
+}
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -150,6 +164,7 @@ MainWindow::MainWindow(QWidget *parent)
     init_books();
     init_borrowed();
     init_spis();
+    init_spoznione();
   
      ui->tableWidget_wypozyczenia->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
      ui->comboBox_gatunki->setEnabled(0);
